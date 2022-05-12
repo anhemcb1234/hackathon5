@@ -7,13 +7,16 @@ import {
 } from "react-router-dom";
 import Login from './pages/LogIn';
 import SignUp from './pages/SignUp';
+import Quiz from './pages/Quiz';
 export default function App() {
   return (
     <div>
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Login />} />
-          <Route path="/signup" element={<SignUp />} >
+          <Route path="/signup" element={<SignUp />} />
+          <Route path="/quiz" element={<Quiz />} >
+
         
           </Route>
 

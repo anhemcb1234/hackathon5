@@ -45,7 +45,7 @@ const SignUp = () => {
                   >
                     Sign Up
                   </button>
-                  <p className="text-sm font-semibold mt-2 pt-1 mb-0">
+                  <p className="text-sm font-semibold text-center mt-4 pt-1 mb-0">
                     Already have an account
                     <Link to="/">
                       <button className="underline ml-1">Login</button>

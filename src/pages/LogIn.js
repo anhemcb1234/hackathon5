@@ -36,13 +36,6 @@ const Login = () => {
     validatePass();
   };
   const handlerLogin = async () => {
-    if (!validate) {
-      setShowToast(true);
-      setTimeout(() => {
-        setShowToast(false);
-      }, 3000);
-      return;
-    }
     try {
       setShow(true);
       const reps = await loginServices.Login({
@@ -51,12 +44,16 @@ const Login = () => {
       });
       localStorage.setItem("token", reps.data.token);
       localStorage.setItem("idUser", reps.data.id);
-      alert("Login success");
       navigate("/choose-quiz");
     } catch (e) {
-      setShow(false);
       navigate("/");
-      console.log(e);
+      setTimeout(() => {
+        setShow(false);
+      }, 2000)
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+      }, 6000);
     }
   };
   return (
@@ -87,7 +84,6 @@ const Login = () => {
               <div
                 className="bg-red-600 shadow-lg mx-auto w-96 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block mb-3"
                 id="static-example"
-                role="alert"
                 aria-live="assertive"
                 aria-atomic="true"
                 data-mdb-autohide="false"

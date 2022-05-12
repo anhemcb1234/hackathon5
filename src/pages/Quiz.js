@@ -8,28 +8,42 @@ const Quiz = () => {
     return searchParam?.get("id");
   });
   const [show, setShow] = useState(true);
+  const [questions, setQuestions] = useState([]);
   const [question, setQuestion] = useState([]);
+
+  const [questionId, setQuestionId] = useState(0);
+
   const handlerStart = () => {
     setShow(!show);
   };
-  const test = () => {
-    console.log(question);
-    console.log(1)
-  };
+
   useEffect(() => {
     (async () => {
       try {
         let repsQuestion = await examsServices.getQuestions(id);
-        setQuestion(repsQuestion.data);
+        setQuestions(repsQuestion.data);
         setId(searchParam?.get("id"));
       } catch (e) {
         console.log(e);
       }
     })();
-  }, []);
+  }, [show]);
+  const handlerPrevious = () => {
+    if(questionId <= 0){
+      setQuestionId(0)
+      return
+    }
+    setQuestionId(questionId - 1);
+  };
+  const handlerNext = () => {
+    if(questionId === questions.length - 1){
+      setQuestionId(0)
+      return
+    }
+    setQuestionId(questionId + 1);
+  };
   return (
     <>
-      <button onClick={() => test()}>test</button>
       {show ? (
         <div
           id="app"
@@ -55,16 +69,38 @@ const Quiz = () => {
           className="flex w-full h-screen justify-center items-center"
         >
           <div className="w-full max-w-xl p-3">
-            <div className="bg-white h-50 p-0 rounded-lg shadow-lg w-full mt-8">
-              <div className="flex justify-start">
-                <div>
-                  {question?.map((item, index) => (
+            <p>
+                Câu hỏi: {questionId+1}/{questions.length}
+            </p>
+            <div className="flex justify-start flex-col">
+              <>
+                <p className="font-bold w-full text-2xl text-indigo-700">
+                  {questions[questionId]?.question_content}
+                </p>
+                {questions[questionId]?.answerDTOS?.map((item, index) => (
+                  <div className="mx-2 flex items-center" key={index}>
+                    <input
+                      className="form-check-input mr-2  appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left cursor-pointer"
+                      type={questions[questionId]?.question_type == 1 ? "radio" : "checkbox"}
+                      name="flexRadioDefault"
+                      id={item?.id}
+                    />
+                    <label
+                      className="form-check-label text-xl inline-block text-gray-800"
+                      for={item?.id}
+                    >
+                      {index + 1}. {item?.answer_content}
+                    </label>
+                  </div>
+                ))}
+
+                {/* {questionId?.filter((item) => item?.id === questionId).question?.map((item, index) => (
                     <>
                       <div
                         key={index}
                         className="form-check p-4 w-full flex flex-col"
                       >
-                        <h1 className="font-bold text-5xl text-center text-indigo-700">Câu {index +1}: {item?.question_content}</h1>
+                        <p className="font-bold w-full text-2xl text-indigo-700">Câu {index +1}: {item?.question_content}</p>
                         <div className="flex flex-col justify-start items-start">
                           {item?.answerDTOS?.map((question, questionIndex) => (
                             <div className="mx-2 flex items-center">
@@ -92,11 +128,23 @@ const Quiz = () => {
                         </div>
                       </div>
                     </>
-                  ))}
-                </div>
-              </div>
-
-              {/* <div>
+                  ))} */}
+              </>
+            </div>
+            <div className="flex a justify-between mt-10">
+              <button onClick={() => handlerPrevious()} className="float-right hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 bg-indigo-600 text-white text-sm font-bold tracking-wide rounded-full px-5 py-2">
+                Previous
+              </button>
+              <button onClick={() => handlerNext()} className="float-right hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 bg-indigo-600 text-white text-sm font-bold tracking-wide rounded-full px-5 py-2">
+                Next
+              </button>
+            </div>
+            <div className="w-full mt-4">
+              <button onClick={() => handlerNext()} className="float-right w-full hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 bg-indigo-600 text-white text-sm font-bold tracking-wide rounded-full px-5 py-2">
+                Finish
+              </button>
+            </div>
+            {/* <div>
             <h2 className="text-bold text-3xl">Results</h2>
             <div className="flex justify-start space-x-4 mt-6">
               <p>
@@ -118,8 +166,8 @@ const Quiz = () => {
               </button>
             </div>
           </div> */}
-            </div>
-            {/* <div className="mt-6 flex justify-between">
+          </div>
+          {/* <div className="mt-6 flex justify-between">
               <Link to={`/quiz/id=${1}`}>
                 <button className="float-right hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 bg-indigo-600 text-white text-sm font-bold tracking-wide rounded-full px-5 py-2">
                   Previous
@@ -131,7 +179,6 @@ const Quiz = () => {
                 </button>
               </Link>
             </div> */}
-          </div>
         </div>
       )}
     </>

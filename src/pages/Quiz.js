@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
+import StatusAnswer from "../components/statusAnswer";
 const Quiz = () => {
   const [id, setId] = useState(1);
   const [show, setShow] = useState(true);

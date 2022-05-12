@@ -9,8 +9,7 @@ const Quiz = () => {
   });
   const [show, setShow] = useState(true);
   const [questions, setQuestions] = useState([]);
-  const [question, setQuestion] = useState([]);
-
+  const [filterSelected, setFilterSelected] = useState([]);
   const [questionId, setQuestionId] = useState(0);
 
   const handlerStart = () => {
@@ -42,8 +41,20 @@ const Quiz = () => {
     }
     setQuestionId(questionId + 1);
   };
+  const selectedFilterHandle = (id) => {
+    if(filterSelected.includes(id)){
+      const tmp = filterSelected.filter(item => item !== id);
+      setFilterSelected(tmp);
+      return;
+    }
+    setFilterSelected([...filterSelected, id]);
+  }
+  const test = () => {
+    console.log(filterSelected)
+  }
   return (
     <>
+    <button onClick={() => test()}>show</button>
       {show ? (
         <div
           id="app"
@@ -84,6 +95,10 @@ const Quiz = () => {
                       type={questions[questionId]?.question_type == 1 ? "radio" : "checkbox"}
                       name="flexRadioDefault"
                       id={item?.id}
+
+                      defaultChecked={questions[questionId]?.question_type == 1 ? '' : filterSelected.includes(item?.answer_content)}
+
+                      onChange={questions[questionId]?.question_type == 1 ? null :() => selectedFilterHandle(item?.answer_content)}
                     />
                     <label
                       className="form-check-label text-xl inline-block text-gray-800"

@@ -8,8 +8,12 @@ function getExamById(id){
 function getQuestions(id){
     return Axios.get(`/question/getQuestionByExamId/${id}`);
 }
+function addQuestions(payload){
+    return Axios.post(`/question/add`,payload);
+}
 export const examsServices = {
     getExams,
     getExamById,
-    getQuestions
+    getQuestions,
+    addQuestions
 };

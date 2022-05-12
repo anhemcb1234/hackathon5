@@ -1,7 +1,25 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { signServices } from "../services/signServices";
 
 const SignUp = () => {
+  const [username, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+  let navigate = useNavigate()
+
+  const handlerSingUp = async () => {
+    try {
+      await signServices.SignUp({
+        username,
+        password,
+        email,
+      });
+      navigate("/");
+    } catch (e) {
+      console.log(e);
+    }
+  };
   return (
     <>
       <section className="h-screen ">
@@ -25,21 +43,33 @@ const SignUp = () => {
                     type="text"
                     className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                     id="exampleFormControlInput2"
-                    placeholder="Email address"
+                    placeholder="User name"
+                    onChange={(e) => setUserName(e.target.value)}
                   />
                 </div>
 
+                <div className="mb-6">
+                  <input
+                    type="text"
+                    className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
+                    id="exampleFormControlInput2"
+                    placeholder="Email address"
+                    onChange={(e) => setEmail(e.target.value)}
+                  />
+                </div>
                 <div className="mb-6">
                   <input
                     type="password"
                     className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                     id="exampleFormControlInput2"
                     placeholder="Password"
+                    onChange={(e) => setPassword(e.target.value)}
                   />
                 </div>
 
                 <div className="text-center lg:text-left">
                   <button
+                    onClick={() => handlerSingUp()}
                     type="button"
                     className="inline-block w-full px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
                   >

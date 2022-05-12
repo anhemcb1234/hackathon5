@@ -1,17 +1,23 @@
 import React, { useEffect, useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import StatusAnswer from "../components/statusAnswer";
 const Quiz = () => {
   const [id, setId] = useState(1);
+  const [searchParam] = useSearchParams();
   const [show, setShow] = useState(true);
   useEffect(() => {
     setId(id + 1);
-  });
+  }, []);
   const handlerStart = () => {
     setShow(!show);
   }
+  const test = () => {
+    console.log(1)
+    console.log(searchParam.get('id'))
+  }
   return (
     <>
+    <button onClick={() => test()}>test</button>
       {show ? (
         <div
           id="app"

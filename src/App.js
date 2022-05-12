@@ -12,8 +12,8 @@ export default function App() {
         <Routes>
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
-          <Route path="/choosequiz" element={<ChooseQuiz />} />
-          <Route path="/quiz" element={<Quiz />}></Route>
+          <Route path="/choose-quiz" element={<ChooseQuiz />} />
+          <Route path={`/quiz/id=${1}`} element={<Quiz />}></Route>
         </Routes>
         {/* <Link to={`/about?name=mien&age=20`}>about</Link> */}
       </BrowserRouter>

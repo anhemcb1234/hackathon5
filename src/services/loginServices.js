@@ -1,7 +1,7 @@
 import {Axios} from './Axios';
-function login(payload){
-    return Axios.post('login',payload);
+function Login(payload){
+    return Axios.post('/signin',payload);
 }
 export const loginServices = {
-    login
+    Login
 };

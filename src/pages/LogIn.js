@@ -1,7 +1,24 @@
-import React from "react";
-import { Link } from "react-router-dom";
+import React, {useState} from "react";
+import { Link, useNavigate } from "react-router-dom";
+import {loginServices} from "../services/loginServices"
 
 const Login = () => {
+  const [username, setUserName] = useState("");
+  const [password, setPassword] = useState("");
+  let navigate = useNavigate()
+  const handlerLogin = async () => {
+    try{
+      const reps = await loginServices.Login({
+        username,
+        password
+      })
+      localStorage.setItem('token', reps.data.token);
+      localStorage.setItem('idUser', reps.data.id);
+      navigate('/choose-quiz')
+    } catch(e) {
+      console.log(e)
+    }
+  }
   return (
     <>
       <section className="h-screen">
@@ -26,6 +43,7 @@ const Login = () => {
                     className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                     id="exampleFormControlInput2"
                     placeholder="Email address"
+                    onChange={e => setUserName(e.target.value)}
                   />
                 </div>
 
@@ -35,11 +53,13 @@ const Login = () => {
                     className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
                     id="exampleFormControlInput2"
                     placeholder="Password"
+                    onChange={e => setPassword(e.target.value)}
                   />
                 </div>
 
                 <div className="text-center lg:text-left">
                   <button
+                    onClick={() => handlerLogin()}
                     type="button"
                     className="inline-block w-full px-7 py-3 bg-blue-600 text-white font-medium text-sm leading-snug uppercase rounded shadow-md hover:bg-blue-700 hover:shadow-lg focus:bg-blue-700 focus:shadow-lg focus:outline-none focus:ring-0 active:bg-blue-800 active:shadow-lg transition duration-150 ease-in-out"
                   >

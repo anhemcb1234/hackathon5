@@ -15,8 +15,10 @@ const SignUp = () => {
         password,
         email,
       });
+      alert("Sign up success");
       navigate("/");
     } catch (e) {
+      alert("Sign up fail");
       console.log(e);
     }
   };

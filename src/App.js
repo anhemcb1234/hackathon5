@@ -13,7 +13,7 @@ export default function App() {
           <Route path="/" element={<Login />} />
           <Route path="/signup" element={<SignUp />} />
           <Route path="/choose-quiz" element={<ChooseQuiz />} />
-          <Route path={`/quiz/id=${1}`} element={<Quiz />}></Route>
+          <Route path="/quiz" element={<Quiz />}></Route>
         </Routes>
         {/* <Link to={`/about?name=mien&age=20`}>about</Link> */}
       </BrowserRouter>

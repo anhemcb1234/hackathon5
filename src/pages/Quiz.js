@@ -11,11 +11,23 @@ const Quiz = () => {
   const [questions, setQuestions] = useState([]);
   const [filterSelected, setFilterSelected] = useState([]);
   const [questionId, setQuestionId] = useState(0);
+  const [minutes, setMinutes] = useState(10);
+  const [second, setSecond] = useState(0);
 
   const handlerStart = () => {
     setShow(!show);
   };
-
+  useEffect(() => {
+    if(second === 0) {
+      setSecond(59);
+      setMinutes(minutes - 1);
+    }
+    // setSecond(second - 1);
+    let time = setInterval(() => {
+      setSecond(second - 1);
+    }, 1000)
+    return () => clearInterval(time);
+  }, [second])
   useEffect(() => {
     (async () => {
       try {
@@ -28,33 +40,33 @@ const Quiz = () => {
     })();
   }, [show]);
   const handlerPrevious = () => {
-    if(questionId <= 0){
-      setQuestionId(0)
-      return
+    if (questionId <= 0) {
+      setQuestionId(0);
+      return;
     }
     setQuestionId(questionId - 1);
   };
   const handlerNext = () => {
-    if(questionId === questions.length - 1){
-      setQuestionId(0)
-      return
+    if (questionId === questions.length - 1) {
+      setQuestionId(0);
+      return;
     }
     setQuestionId(questionId + 1);
   };
   const selectedFilterHandle = (id) => {
-    if(filterSelected.includes(id)){
-      const tmp = filterSelected.filter(item => item !== id);
+    if (filterSelected.includes(id)) {
+      const tmp = filterSelected.filter((item) => item !== id);
       setFilterSelected(tmp);
       return;
     }
     setFilterSelected([...filterSelected, id]);
-  }
+  };
   const test = () => {
-    console.log(filterSelected)
-  }
+    console.log(filterSelected);
+  };
   return (
     <>
-    <button onClick={() => test()}>show</button>
+      <button onClick={() => test()}>show</button>
       {show ? (
         <div
           id="app"
@@ -80,9 +92,15 @@ const Quiz = () => {
           className="flex w-full h-screen justify-center items-center"
         >
           <div className="w-full max-w-xl p-3">
-            <p>
-                Câu hỏi: {questionId+1}/{questions.length}
-            </p>
+            <div className="flex justify-between">
+              <p>
+                Câu hỏi: {questionId + 1}/{questions.length}
+              </p>
+              <span class="countdown font-mono text-2xl">
+                <span style={{ "--value": minutes }}></span>m
+                <span style={{ "--value": second }}></span>s
+              </span>
+            </div>
             <div className="flex justify-start flex-col">
               <>
                 <p className="font-bold w-full text-2xl text-indigo-700">
@@ -92,13 +110,23 @@ const Quiz = () => {
                   <div className="mx-2 flex items-center" key={index}>
                     <input
                       className="form-check-input mr-2  appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left cursor-pointer"
-                      type={questions[questionId]?.question_type == 1 ? "radio" : "checkbox"}
+                      type={
+                        questions[questionId]?.question_type == 1
+                          ? "radio"
+                          : "checkbox"
+                      }
                       name="flexRadioDefault"
                       id={item?.id}
-
-                      defaultChecked={questions[questionId]?.question_type == 1 ? '' : filterSelected.includes(item?.answer_content)}
-
-                      onChange={questions[questionId]?.question_type == 1 ? null :() => selectedFilterHandle(item?.answer_content)}
+                      defaultChecked={
+                        questions[questionId]?.question_type == 1
+                          ? ""
+                          : filterSelected.includes(item?.answer_content)
+                      }
+                      onChange={
+                        questions[questionId]?.question_type == 1
+                          ? null
+                          : () => selectedFilterHandle(item?.answer_content)
+                      }
                     />
                     <label
                       className="form-check-label text-xl inline-block text-gray-800"
@@ -147,15 +175,24 @@ const Quiz = () => {
               </>
             </div>
             <div className="flex a justify-between mt-10">
-              <button onClick={() => handlerPrevious()} className="float-right hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 bg-indigo-600 text-white text-sm font-bold tracking-wide rounded-full px-5 py-2">
+              <button
+                onClick={() => handlerPrevious()}
+                className="float-right hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 bg-indigo-600 text-white text-sm font-bold tracking-wide rounded-full px-5 py-2"
+              >
                 Previous
               </button>
-              <button onClick={() => handlerNext()} className="float-right hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 bg-indigo-600 text-white text-sm font-bold tracking-wide rounded-full px-5 py-2">
+              <button
+                onClick={() => handlerNext()}
+                className="float-right hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 bg-indigo-600 text-white text-sm font-bold tracking-wide rounded-full px-5 py-2"
+              >
                 Next
               </button>
             </div>
             <div className="w-full mt-4">
-              <button onClick={() => handlerNext()} className="float-right w-full hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 bg-indigo-600 text-white text-sm font-bold tracking-wide rounded-full px-5 py-2">
+              <button
+                onClick={() => handlerNext()}
+                className="float-right w-full hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 bg-indigo-600 text-white text-sm font-bold tracking-wide rounded-full px-5 py-2"
+              >
                 Finish
               </button>
             </div>

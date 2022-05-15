@@ -25,19 +25,19 @@ const Quiz = () => {
     setMinutes(5);
     setSecond(59);
   };
-  // useEffect(() => {
-  //   if (second === 0 && minutes === 0) {
-  //     alert("Time is up");
-  //   }
-  //   if (second === 0) {
-  //     setSecond(59);
-  //     setMinutes(minutes - 1);
-  //   }
-  //   let time = setInterval(() => {
-  //     setSecond(second - 1);
-  //   }, 1000);
-  //   return () => clearInterval(time);
-  // }, []);
+  useEffect(() => {
+    if (second === 0 && minutes === 0) {
+      alert("Time is up");
+    }
+    if (second === 0) {
+      setSecond(59);
+      setMinutes(minutes - 1);
+    }
+    let time = setInterval(() => {
+      setSecond(second - 1);
+    }, 1000);
+    return () => clearInterval(time);
+  }, [second]);
   useEffect(() => {
     (async () => {
       try {

@@ -7,9 +7,14 @@ const Quiz = () => {
   const [id, setId] = useState(() => {
     return searchParam?.get("id");
   });
+  const [idUser, setIdUser] = useState(() => {
+    return localStorage.getItem("idUser");
+  });
   const [show, setShow] = useState(true);
   const [questions, setQuestions] = useState([]);
-  const [filterSelected, setFilterSelected] = useState([]);
+  const [filterSelected, setFilterSelected] = useState(() => {
+    return []
+  });
   const [questionId, setQuestionId] = useState(0);
   const [minutes, setMinutes] = useState(10);
   const [second, setSecond] = useState(0);
@@ -19,6 +24,7 @@ const Quiz = () => {
   const [check, setCheck] = useState(false);
   const [dataCheckBox, setDataCheckBox] = useState([]);
   const [dataCheckBoxs, setDataCheckBoxs] = useState([]);
+  const [result, setResult] = useState([]);
 
   const handlerStart = () => {
     setShow(!show);
@@ -64,39 +70,47 @@ const Quiz = () => {
     setQuestionId(questionId - 1);
   };
   const handlerNext = () => {
-    setQuestionId(questionId + 1);
-    setListAnswers((pre) => [...pre, listAnswer]);
-    // setDataCheckBoxs(...dataCheckBoxs, dataCheckBox);
-    if (dataCheckBox.length > 0) {
-      setFilterSelected([...filterSelected, dataCheckBox]);
-    }
-    const arr1 = getUniqueListBy(listsAnswer, "question_id");
-    setAddQuestion(arr1);
-    console.log("arr2", arr1);
     if (questionId === questions.length - 1) {
       setQuestionId(0);
       return;
     }
+    setListAnswers((pre) => [...pre, listAnswer]);
+    
+   
+    setQuestionId(questionId + 1);
   };
-  const selectedFilterHandle = (id, index, item) => {
-    let test = [...questions];
+  useEffect(() => {
+    const arr1 = getUniqueListBy(listsAnswer, "question_id");
+    setAddQuestion(arr1);
+
+  }, [listsAnswer])
+  const selectedFilterHandle = (id, index, item, e) => {
+    console.log('item',item.question_id)
     item.checked = !item.checked;
     item.question_type = 2;
     item.idSingleQuestion = null;
-    setQuestions(test);
-    let newArray = questions[questionId]?.answerDTOS.filter(
-      (x) => x.checked === true
-    );
-    setDataCheckBox(...dataCheckBox,newArray);
-    console.log("newArray", newArray);
-    console.log("setDataCheckBox", dataCheckBox);
+    if(filterSelected?.includes(index)){
+      const tmp = filterSelected?.filter(item => item !== index);
+      setFilterSelected(tmp);
+      return;
+    }
+    setFilterSelected([...filterSelected, index]);
+    // setFilterSelected(value);
+    console.log('id', id)
+    console.log('index', index)
+    let test = [{
+      question_id: item?.question_id,
+      question_type: item.question_type,
+      idSingleQuestion : item.idSingleQuestion,
+      listIdAnswer: filterSelected
+    }]
+    setResult(...result, test)
+    console.log('test', test)
   };
   const test = () => {
-    console.log("listAnswer", listAnswer);
-    console.log("addQuestion", addQuestion);
-    console.log("questions", questions);
-    // console.log("dataCheckBoxssssssss", dataCheckBoxs);
-    console.log("dataCheckBox", dataCheckBox);
+    console.log('filterSelected',filterSelected)
+    console.log("addQuestion", addQuestion)
+    console.log('test', result)
   };
   useEffect(() => {
     let test = [...questions];
@@ -107,17 +121,13 @@ const Quiz = () => {
     return [...new Map(arr.map((item) => [item[key], item])).values()];
   }
   const radioFilterHandler = (id) => {
-    console.log(id);
     let testA = [...questions];
     let testing = [...questions];
     testA[questionId]?.answerDTOS?.map((x) => (x.anwer = false));
     testA[questionId]?.answerDTOS?.map((x) => (x.question_type = 1));
     testA[questionId]?.answerDTOS?.map((x) => (x.idSingleQuestion = id));
     let a = testA[questionId]?.answerDTOS?.find((x) => x.id === id);
-    if (a.isright === true) {
-      a.point = 10;
-    }
-    console.log("a", a);
+    a.id = id;
     a.anwer = !a.anwer;
     // console.log("questions", questions);
     let filerList = testing[questionId]?.answerDTOS?.find(
@@ -129,7 +139,7 @@ const Quiz = () => {
   };
   const handlerSubmit = async () => {
     await examsServices.addQuestions({
-      userId: "1",
+      userId: idUser,
       examId: id,
       lstQuestion: addQuestion,
     });
@@ -193,6 +203,7 @@ const Quiz = () => {
                       }
                       name="flexRadioDefault"
                       id={item?.id}
+                      value={item?.id}
                       checked={
                         questions[questionId]?.question_type == 1
                           ? item?.anwer
@@ -201,11 +212,12 @@ const Quiz = () => {
                       onChange={
                         questions[questionId]?.question_type == 1
                           ? () => radioFilterHandler(item?.id)
-                          : () =>
+                          : (e) =>
                               selectedFilterHandle(
                                 item?.answer_content,
                                 item?.id,
-                                item
+                                item,
+                                e
                               )
                       }
                     />

@@ -1,15 +1,12 @@
 import React, { useEffect, useState } from "react";
 import { Link, useSearchParams } from "react-router-dom";
-import StatusAnswer from "../components/statusAnswer";
 import { examsServices } from "../services/examsServices";
-import handleCheckbox from "react-checkbox-handling";
 
 const Quiz = () => {
   const [searchParam] = useSearchParams();
   const [id, setId] = useState(() => {
     return searchParam?.get("id");
   });
-  const [idQuestion, setIdQuestion] = useState(0);
   const [show, setShow] = useState(true);
   const [questions, setQuestions] = useState([]);
   const [filterSelected, setFilterSelected] = useState([]);
@@ -18,27 +15,29 @@ const Quiz = () => {
   const [second, setSecond] = useState(0);
   const [listAnswer, setListAnswer] = useState([]);
   const [listsAnswer, setListAnswers] = useState([]);
-  const [addQuestion,setAddQuestion] = useState([])
+  const [addQuestion, setAddQuestion] = useState([]);
+  const [check, setCheck] = useState(false);
+  const [dataCheckBox, setDataCheckBox] = useState([]);
+  const [dataCheckBoxs, setDataCheckBoxs] = useState([]);
 
   const handlerStart = () => {
     setShow(!show);
     setMinutes(5);
     setSecond(59);
   };
-  useEffect(() => {
-    localStorage.setItem("filterSelected", JSON.stringify(filterSelected));
-    if (second === 0 && minutes === 0) {
-      alert("Time is up");
-    }
-    if (second === 0) {
-      setSecond(59);
-      setMinutes(minutes - 1);
-    }
-    let time = setInterval(() => {
-      setSecond(second - 1);
-    }, 1000);
-    return () => clearInterval(time);
-  }, [second]);
+  // useEffect(() => {
+  //   if (second === 0 && minutes === 0) {
+  //     alert("Time is up");
+  //   }
+  //   if (second === 0) {
+  //     setSecond(59);
+  //     setMinutes(minutes - 1);
+  //   }
+  //   let time = setInterval(() => {
+  //     setSecond(second - 1);
+  //   }, 1000);
+  //   return () => clearInterval(time);
+  // }, []);
   useEffect(() => {
     (async () => {
       try {
@@ -50,8 +49,11 @@ const Quiz = () => {
       }
     })();
   }, [show]);
+
   const handlerPrevious = () => {
+    setCheck();
     setListAnswers((pre) => [...pre, listAnswer]);
+    setFilterSelected(dataCheckBox);
     const arr1 = getUniqueListBy(listsAnswer, "question_id");
     setAddQuestion(arr1);
     console.log("arr1", arr1);
@@ -62,31 +64,39 @@ const Quiz = () => {
     setQuestionId(questionId - 1);
   };
   const handlerNext = () => {
+    setQuestionId(questionId + 1);
     setListAnswers((pre) => [...pre, listAnswer]);
+    // setDataCheckBoxs(...dataCheckBoxs, dataCheckBox);
+    if (dataCheckBox.length > 0) {
+      setFilterSelected([...filterSelected, dataCheckBox]);
+    }
     const arr1 = getUniqueListBy(listsAnswer, "question_id");
-    setAddQuestion(arr1)
+    setAddQuestion(arr1);
     console.log("arr2", arr1);
     if (questionId === questions.length - 1) {
       setQuestionId(0);
       return;
     }
-    setQuestionId(questionId + 1);
   };
-  const selectedFilterHandle = (id) => {
-    if (filterSelected.includes(id)) {
-      const tmp = filterSelected.filter((item) => item !== id);
-      setFilterSelected(tmp);
-      return;
-    }
-    setFilterSelected([...filterSelected, id]);
+  const selectedFilterHandle = (id, index, item) => {
+    let test = [...questions];
+    item.checked = !item.checked;
+    item.question_type = 2;
+    item.idSingleQuestion = null;
+    setQuestions(test);
+    let newArray = questions[questionId]?.answerDTOS.filter(
+      (x) => x.checked === true
+    );
+    setDataCheckBox(...dataCheckBox,newArray);
+    console.log("newArray", newArray);
+    console.log("setDataCheckBox", dataCheckBox);
   };
   const test = () => {
-    let test = [...questions];
-    test.map((x) => x.answerDTOS?.map((y) => (y.checked = false)));
-    setQuestions(test);
     console.log("listAnswer", listAnswer);
     console.log("addQuestion", addQuestion);
-    console.log("filterSelected", filterSelected)
+    console.log("questions", questions);
+    // console.log("dataCheckBoxssssssss", dataCheckBoxs);
+    console.log("dataCheckBox", dataCheckBox);
   };
   useEffect(() => {
     let test = [...questions];
@@ -97,15 +107,17 @@ const Quiz = () => {
     return [...new Map(arr.map((item) => [item[key], item])).values()];
   }
   const radioFilterHandler = (id) => {
-    setIdQuestion(id);
+    console.log(id);
     let testA = [...questions];
     let testing = [...questions];
     testA[questionId]?.answerDTOS?.map((x) => (x.anwer = false));
+    testA[questionId]?.answerDTOS?.map((x) => (x.question_type = 1));
+    testA[questionId]?.answerDTOS?.map((x) => (x.idSingleQuestion = id));
     let a = testA[questionId]?.answerDTOS?.find((x) => x.id === id);
-    if(a.isright === true) {
+    if (a.isright === true) {
       a.point = 10;
-    }   
-    console.log('a',a)
+    }
+    console.log("a", a);
     a.anwer = !a.anwer;
     // console.log("questions", questions);
     let filerList = testing[questionId]?.answerDTOS?.find(
@@ -114,6 +126,13 @@ const Quiz = () => {
     // console.log("filerList", filerList);
 
     setListAnswer(filerList);
+  };
+  const handlerSubmit = async () => {
+    await examsServices.addQuestions({
+      userId: "1",
+      examId: id,
+      lstQuestion: addQuestion,
+    });
   };
   return (
     <>
@@ -174,10 +193,20 @@ const Quiz = () => {
                       }
                       name="flexRadioDefault"
                       id={item?.id}
+                      checked={
+                        questions[questionId]?.question_type == 1
+                          ? item?.anwer
+                          : item?.checked
+                      }
                       onChange={
                         questions[questionId]?.question_type == 1
                           ? () => radioFilterHandler(item?.id)
-                          : () => selectedFilterHandle(item?.answer_content)
+                          : () =>
+                              selectedFilterHandle(
+                                item?.answer_content,
+                                item?.id,
+                                item
+                              )
                       }
                     />
                     <label
@@ -206,7 +235,7 @@ const Quiz = () => {
             </div>
             <div className="w-full mt-4">
               <button
-                onClick={() => handlerNext()}
+                onClick={() => handlerSubmit()}
                 className="float-right w-full hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 bg-indigo-600 text-white text-sm font-bold tracking-wide rounded-full px-5 py-2"
               >
                 Finish

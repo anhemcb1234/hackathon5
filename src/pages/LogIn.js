@@ -10,7 +10,6 @@ const Login = () => {
 
   let navigate = useNavigate();
 
-
   const handlerLogin = async () => {
     try {
       setShow(true);
@@ -25,7 +24,7 @@ const Login = () => {
       navigate("/");
       setTimeout(() => {
         setShow(false);
-      }, 2000)
+      }, 2000);
       setShowToast(true);
       setTimeout(() => {
         setShowToast(false);

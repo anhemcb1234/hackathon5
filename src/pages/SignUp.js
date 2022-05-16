@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { signServices } from "../services/signServices";
 
@@ -6,35 +6,26 @@ const SignUp = () => {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  const [showToast, setShowToast] = useState(false);
 
+  const [showToast, setShowToast] = useState(false);
+  const [showLogin, setShowLogin] = useState(false);
   let navigate = useNavigate();
-  const validateName = () => {
-    if (username.length < 2) {
-      setUserName("");
-    }
-    return;
-  };
-  const validateEmail = () => {
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email)) {
-      return true;
-    }
-    alert("Email không đúng định dạng");
-    this.email = "";
-    return;
-  };
-  const validatePass = () => {
-    if (password.length < 2) {
-      setPassword("");
+
+  const handlerSingUp = async () => {
+    if (
+      !(
+        password.length > 5 &&
+        username.length > 5 &&
+        /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email)
+      )
+    ) {
+      setShowToast(false);
+      setShowLogin(true);
+      setTimeout(() => {
+        setShowLogin(false);
+      }, 3000);
       return;
     }
-  };
-  const validate = () => {
-    validateName();
-    validateEmail();
-    validatePass();
-  };
-  const handlerSingUp = async () => {
     try {
       await signServices.SignUp({
         username,
@@ -45,16 +36,19 @@ const SignUp = () => {
       setTimeout(() => {
         setShowToast(false);
       }, 2000);
-      setTimeout(() => {
-        navigate("/");
-      }, 2000);
     } catch (e) {
       alert("Sign up fail");
       console.log(e);
     }
   };
+  const handlerTest = () => {
+    console.log(password);
+    console.log(username);
+    console.log(email);
+  };
   return (
     <>
+      <button onClick={() => handlerTest()}>test</button>
       {showToast ? (
         <div className="flex absolute left-0 right-0 top-10  ease-in duration-300 flex-col justify-center">
           <div
@@ -67,12 +61,34 @@ const SignUp = () => {
             <div className="bg-green-600 flex justify-between items-center py-2 px-3 bg-clip-padding border-b border-green-500 rounded-t-lg">
               <p className="font-bold text-white flex items-center">SUCCESS</p>
             </div>
-            <div class="p-3 bg-green-600 rounded-b-lg break-words text-white">
-              <p class="font-bold">Sign up success</p>
+            <div className="p-3 bg-green-600 rounded-b-lg break-words text-white">
+              <p className="font-bold">Sign up success</p>
             </div>
           </div>
         </div>
-      ) : null}
+      ) : showLogin ? (
+        <div className="flex absolute left-0 right-0 top-10  ease-in duration-300 flex-col justify-center">
+          <div
+            className="bg-red-600 shadow-lg mx-auto w-96 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block mb-3"
+            id="static-example"
+            aria-live="assertive"
+            aria-atomic="true"
+            data-mdb-autohide="false"
+          >
+            <div className="bg-red-600 flex justify-between items-center py-2 px-3 bg-clip-padding border-b border-red-500 rounded-t-lg">
+              <p className="font-bold text-white flex items-center">Error</p>
+            </div>
+            <div className="p-3 bg-red-600 rounded-b-lg break-words text-white">
+              <p className="font-bold">
+                Username, password must be more than 6 characters and Email must
+                be in the correct format
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        ""
+      )}
       <section className="h-screen ">
         <div className="px-6 h-full text-gray-800">
           <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
@@ -93,7 +109,7 @@ const SignUp = () => {
                   <input
                     type="text"
                     className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    id="exampleFormControlInput2"
+                    id="exampleFormControlInput1"
                     placeholder="User name"
                     onChange={(e) => setUserName(e.target.value)}
                   />
@@ -112,7 +128,7 @@ const SignUp = () => {
                   <input
                     type="password"
                     className="form-control block w-full px-4 py-2 text-xl font-normal text-gray-700 bg-white bg-clip-padding border border-solid border-gray-300 rounded transition ease-in-out m-0 focus:text-gray-700 focus:bg-white focus:border-blue-600 focus:outline-none"
-                    id="exampleFormControlInput2"
+                    id="exampleFormControlInput3"
                     placeholder="Password"
                     onChange={(e) => setPassword(e.target.value)}
                   />

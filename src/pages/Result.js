@@ -1,6 +1,12 @@
 import React from "react";
+import {useNavigate} from 'react-router-dom'
 
 function Result() {
+  let navigate = useNavigate();
+  if (!localStorage.getItem("token")) {
+    alert("You must be logged in to access this page");
+    navigate("/");
+  }
   return (
     <div>
       <div

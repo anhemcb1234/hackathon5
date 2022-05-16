@@ -17,7 +17,7 @@ const Quiz = () => {
     return [];
   });
   const [questionId, setQuestionId] = useState(0);
-  const [minutes, setMinutes] = useState(10);
+  const [minutes, setMinutes] = useState(0);
   const [second, setSecond] = useState(0);
   const [listAnswer, setListAnswer] = useState([]);
   const [listsAnswer, setListAnswers] = useState([]);
@@ -28,16 +28,20 @@ const Quiz = () => {
     return questions[questionId]?.id;
   });
   const [dataFilter, setDataFilter] = useState([]);
-  const red = 'text-rose-600'
+  const red = "text-rose-600";
+  if (!localStorage.getItem("token")) {
+    alert("You must be logged in to access this page");
+    navigate("/");
+  }
   const handlerStart = () => {
     setShow(!show);
-    setMinutes(5);
+    setMinutes(3);
     setSecond(59);
   };
   useEffect(() => {
     if (second === 0 && minutes === 0) {
       navigate("/result");
-      handlerSubmit()
+      handlerSubmit();
     }
     if (second === 0) {
       setSecond(59);
@@ -72,7 +76,7 @@ const Quiz = () => {
     setListAnswers([...listsAnswer, listAnswer]);
     const arr1 = getUniqueListBy(listsAnswer, "question_id");
     setAddQuestion(arr1);
-  }, [addQuestion])
+  }, [addQuestion]);
   const handlerNext = () => {
     if (questionId === questions.length - 1) {
       setQuestionId(0);
@@ -138,22 +142,18 @@ const Quiz = () => {
       (x) => x.anwer === true
     );
     setListAnswer(filerList);
-    console.log('listanswer',listAnswer)
+    console.log("listanswer", listAnswer);
   };
   const handlerSubmit = async () => {
     await examsServices.addQuestions({
       userId: idUser,
       examId: id,
-      lstQuestion: [...addQuestion.filter(x => x.id), ...dataFilter],
+      lstQuestion: [...addQuestion.filter((x) => x.id), ...dataFilter],
     });
-    navigate(`/result?id=${id}`)
+    navigate(`/result?id=${id}`);
   };
-  const handlerTest = () => {
-    console.log('addQuestion', addQuestion)
-  }
   return (
     <>
-      <button onClick={() => handlerTest()}>TEST</button>
       {show ? (
         <div
           id="app"
@@ -183,7 +183,13 @@ const Quiz = () => {
               <p>
                 Câu hỏi: {questionId + 1}/{questions.length}
               </p>
-              <span className={minutes === 0 ? red + " countdown font-mono text-2xl" : "countdown font-mono text-2xl"}>
+              <span
+                className={
+                  minutes === 0
+                    ? red + " countdown font-mono text-2xl"
+                    : "countdown font-mono text-2xl"
+                }
+              >
                 {minutes === 0 ? (
                   ""
                 ) : (

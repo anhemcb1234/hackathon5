@@ -23,7 +23,6 @@ const Quiz = () => {
   const [listsAnswer, setListAnswers] = useState([]);
   const [addQuestion, setAddQuestion] = useState([]);
   const [check, setCheck] = useState(false);
-  const [result, setResult] = useState([]);
   const [data, setData] = useState([]);
   const [idQuestion, setIdquestion] = useState(() => {
     return questions[questionId]?.id;
@@ -63,30 +62,26 @@ const Quiz = () => {
 
   const handlerPrevious = () => {
     setCheck();
-    setListAnswers((pre) => [...pre, listAnswer]);
-    const arr1 = getUniqueListBy(listsAnswer, "question_id");
-    setAddQuestion(arr1);
     if (questionId <= 0) {
-      setQuestionId(0);
+      setQuestionId(questions.length - 1);
       return;
     }
     setQuestionId(questionId - 1);
   };
+  useEffect(() => {
+    setListAnswers([...listsAnswer, listAnswer]);
+    const arr1 = getUniqueListBy(listsAnswer, "question_id");
+    setAddQuestion(arr1);
+  }, [addQuestion])
   const handlerNext = () => {
     if (questionId === questions.length - 1) {
       setQuestionId(0);
       return;
     }
     setFilterSelected([]);
-    setListAnswers((pre) => [...pre, listAnswer]);
     setQuestionId(questionId + 1);
     selectedFilterHandle();
   };
-  useEffect(() => {
-    const arr1 = getUniqueListBy(listsAnswer, "question_id");
-    console.log('arr1');
-    setAddQuestion(arr1);
-  }, [listsAnswer]);
   useEffect(() => {
     setData([
       ...data,
@@ -103,8 +98,14 @@ const Quiz = () => {
     let newArray2 = getUniqueListBy(newArray, "question_id");
     setDataFilter(newArray2);
   }, [dataFilter]);
+  // useEffect(() => {
+  //   const arr1 = getUniqueListBy(listsAnswer, "question_id");
+  //   console.log('testoigg', arr1)
+  //   setAddQuestion(arr1);
+  // }, [listAnswer]);
+
   const selectedFilterHandle = (id, index, item, e) => {
-    console.log("item", item?.question_id);
+    console.log("item", item);
     console.log("index", index);
     setIdquestion(item?.question_id);
     item.checked = !item.checked;
@@ -133,13 +134,11 @@ const Quiz = () => {
     let a = testA[questionId]?.answerDTOS?.find((x) => x.id === id);
     a.id = id;
     a.anwer = !a.anwer;
-    // console.log("questions", questions);
     let filerList = testing[questionId]?.answerDTOS?.find(
       (x) => x.anwer === true
     );
-    // console.log("filerList", filerList);
-
     setListAnswer(filerList);
+    console.log('listanswer',listAnswer)
   };
   const handlerSubmit = async () => {
     await examsServices.addQuestions({
@@ -149,8 +148,12 @@ const Quiz = () => {
     });
     navigate(`/result?id=${id}`)
   };
+  const handlerTest = () => {
+    console.log('addQuestion', addQuestion)
+  }
   return (
     <>
+      <button onClick={() => handlerTest()}>TEST</button>
       {show ? (
         <div
           id="app"

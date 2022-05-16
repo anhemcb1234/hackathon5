@@ -10,31 +10,7 @@ const Login = () => {
 
   let navigate = useNavigate();
 
-  const validateName = () => {
-    if (username.length < 2) {
-      setUserName("");
-    }
-    return;
-  };
-  const validateEmail = () => {
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.email)) {
-      return true;
-    }
-    alert("Email không đúng định dạng");
-    this.email = "";
-    return;
-  };
-  const validatePass = () => {
-    if (password.length < 2) {
-      setPassword("");
-      return;
-    }
-  };
-  const validate = () => {
-    validateName();
-    // validateEmail();
-    validatePass();
-  };
+
   const handlerLogin = async () => {
     try {
       setShow(true);

@@ -6,7 +6,9 @@ const SignUp = () => {
   const [username, setUserName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
-  let navigate = useNavigate()
+  const [showToast, setShowToast] = useState(false);
+
+  let navigate = useNavigate();
 
   const handlerSingUp = async () => {
     try {
@@ -15,8 +17,13 @@ const SignUp = () => {
         password,
         email,
       });
-      alert("Sign up success");
-      navigate("/");
+      setShowToast(true);
+      setTimeout(() => {
+        setShowToast(false);
+      }, 2000);
+      setTimeout(() => {
+        navigate("/");
+      }, 2000);
     } catch (e) {
       alert("Sign up fail");
       console.log(e);
@@ -24,6 +31,24 @@ const SignUp = () => {
   };
   return (
     <>
+      {showToast ? (
+        <div className="flex absolute left-0 right-0 top-10  ease-in duration-300 flex-col justify-center">
+          <div
+            className="bg-green-600 shadow-lg mx-auto w-96 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block mb-3"
+            id="static-example"
+            aria-live="assertive"
+            aria-atomic="true"
+            data-mdb-autohide="false"
+          >
+            <div className="bg-green-600 flex justify-between items-center py-2 px-3 bg-clip-padding border-b border-green-500 rounded-t-lg">
+              <p className="font-bold text-white flex items-center">SUCCESS</p>
+            </div>
+            <div class="p-3 bg-green-600 rounded-b-lg break-words text-white">
+              <p class="font-bold">Sign up success</p>
+            </div>
+          </div>
+        </div>
+      ) : null}
       <section className="h-screen ">
         <div className="px-6 h-full text-gray-800">
           <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">

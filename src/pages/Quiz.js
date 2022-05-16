@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { Link, useSearchParams } from "react-router-dom";
+import { Link, useSearchParams, useNavigate } from "react-router-dom";
 import { examsServices } from "../services/examsServices";
 
 const Quiz = () => {
+  let navigate = useNavigate();
   const [searchParam] = useSearchParams();
   const [id, setId] = useState(() => {
     return searchParam?.get("id");
@@ -24,8 +25,11 @@ const Quiz = () => {
   const [check, setCheck] = useState(false);
   const [result, setResult] = useState([]);
   const [data, setData] = useState([]);
-  const [idQuestion, setIdquestion] = useState(() => {return questions[questionId]?.id})
-  const [dataFilter, setDataFilter] = useState([])
+  const [idQuestion, setIdquestion] = useState(() => {
+    return questions[questionId]?.id;
+  });
+  const [dataFilter, setDataFilter] = useState([]);
+  const red = 'text-rose-600'
   const handlerStart = () => {
     setShow(!show);
     setMinutes(5);
@@ -33,7 +37,8 @@ const Quiz = () => {
   };
   useEffect(() => {
     if (second === 0 && minutes === 0) {
-      alert("Time is up");
+      navigate("/result");
+      handlerSubmit()
     }
     if (second === 0) {
       setSecond(59);
@@ -72,47 +77,45 @@ const Quiz = () => {
       setQuestionId(0);
       return;
     }
-    setFilterSelected([])
+    setFilterSelected([]);
     setListAnswers((pre) => [...pre, listAnswer]);
     setQuestionId(questionId + 1);
-    selectedFilterHandle()
+    selectedFilterHandle();
   };
   useEffect(() => {
     const arr1 = getUniqueListBy(listsAnswer, "question_id");
+    console.log('arr1');
     setAddQuestion(arr1);
   }, [listsAnswer]);
   useEffect(() => {
-    setData([...data,{
-      question_id: questions[questionId]?.id,
-      question_type: 2,
-      idSingleQuestion: null,
-      filterSelected,
-    }]);
+    setData([
+      ...data,
+      {
+        question_id: questions[questionId]?.id,
+        question_type: 2,
+        idSingleQuestion: null,
+        listIdAnswer: filterSelected,
+      },
+    ]);
   }, [filterSelected]);
   useEffect(() => {
-    let newArray = [...data].filter(x => (Number.isInteger(x.question_id) && x.filterSelected.length));
+    let newArray = [...data].filter((x) => x.listIdAnswer?.length);
     let newArray2 = getUniqueListBy(newArray, "question_id");
     setDataFilter(newArray2);
-  },[dataFilter])
+  }, [dataFilter]);
   const selectedFilterHandle = (id, index, item, e) => {
     console.log("item", item?.question_id);
     console.log("index", index);
-    setIdquestion(item?.question_id)
-    item.checked = !item?.checked;
+    setIdquestion(item?.question_id);
+    item.checked = !item.checked;
     if (filterSelected?.includes(index)) {
       const tmp = filterSelected?.filter((item) => item !== index);
       setFilterSelected(tmp);
       return;
     }
     setFilterSelected([...filterSelected, index]);
-    
   };
-  const test = () => {
 
-    console.log('dataFilter',dataFilter)
-    console.log('addquestion',addQuestion)
-
-  };
   useEffect(() => {
     let test = [...questions];
     test.map((x) => x.answerDTOS?.map((y) => (y.checked = false)));
@@ -142,12 +145,12 @@ const Quiz = () => {
     await examsServices.addQuestions({
       userId: idUser,
       examId: id,
-      lstQuestion: [...addQuestion,...dataFilter],
+      lstQuestion: [...addQuestion.filter(x => x.id), ...dataFilter],
     });
+    navigate(`/result?id=${id}`)
   };
   return (
     <>
-      <button onClick={() => test()}>show</button>
       {show ? (
         <div
           id="app"
@@ -177,7 +180,7 @@ const Quiz = () => {
               <p>
                 Câu hỏi: {questionId + 1}/{questions.length}
               </p>
-              <span className="countdown font-mono text-2xl">
+              <span className={minutes === 0 ? red + " countdown font-mono text-2xl" : "countdown font-mono text-2xl"}>
                 {minutes === 0 ? (
                   ""
                 ) : (

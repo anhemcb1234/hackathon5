@@ -13,7 +13,7 @@ const Quiz = () => {
   const [show, setShow] = useState(true);
   const [questions, setQuestions] = useState([]);
   const [filterSelected, setFilterSelected] = useState(() => {
-    return []
+    return [];
   });
   const [questionId, setQuestionId] = useState(0);
   const [minutes, setMinutes] = useState(10);
@@ -22,10 +22,10 @@ const Quiz = () => {
   const [listsAnswer, setListAnswers] = useState([]);
   const [addQuestion, setAddQuestion] = useState([]);
   const [check, setCheck] = useState(false);
-  const [dataCheckBox, setDataCheckBox] = useState([]);
-  const [dataCheckBoxs, setDataCheckBoxs] = useState([]);
   const [result, setResult] = useState([]);
-
+  const [data, setData] = useState([]);
+  const [idQuestion, setIdquestion] = useState(() => {return questions[questionId]?.id})
+  const [dataFilter, setDataFilter] = useState([])
   const handlerStart = () => {
     setShow(!show);
     setMinutes(5);
@@ -59,10 +59,8 @@ const Quiz = () => {
   const handlerPrevious = () => {
     setCheck();
     setListAnswers((pre) => [...pre, listAnswer]);
-    setFilterSelected(dataCheckBox);
     const arr1 = getUniqueListBy(listsAnswer, "question_id");
     setAddQuestion(arr1);
-    console.log("arr1", arr1);
     if (questionId <= 0) {
       setQuestionId(0);
       return;
@@ -74,43 +72,46 @@ const Quiz = () => {
       setQuestionId(0);
       return;
     }
+    setFilterSelected([])
     setListAnswers((pre) => [...pre, listAnswer]);
-    
-   
     setQuestionId(questionId + 1);
+    selectedFilterHandle()
   };
   useEffect(() => {
     const arr1 = getUniqueListBy(listsAnswer, "question_id");
     setAddQuestion(arr1);
-
-  }, [listsAnswer])
+  }, [listsAnswer]);
+  useEffect(() => {
+    setData([...data,{
+      question_id: questions[questionId]?.id,
+      question_type: 2,
+      idSingleQuestion: null,
+      filterSelected,
+    }]);
+  }, [filterSelected]);
+  useEffect(() => {
+    let newArray = [...data].filter(x => (Number.isInteger(x.question_id) && x.filterSelected.length));
+    let newArray2 = getUniqueListBy(newArray, "question_id");
+    setDataFilter(newArray2);
+  },[dataFilter])
   const selectedFilterHandle = (id, index, item, e) => {
-    console.log('item',item.question_id)
-    item.checked = !item.checked;
-    item.question_type = 2;
-    item.idSingleQuestion = null;
-    if(filterSelected?.includes(index)){
-      const tmp = filterSelected?.filter(item => item !== index);
+    console.log("item", item?.question_id);
+    console.log("index", index);
+    setIdquestion(item?.question_id)
+    item.checked = !item?.checked;
+    if (filterSelected?.includes(index)) {
+      const tmp = filterSelected?.filter((item) => item !== index);
       setFilterSelected(tmp);
       return;
     }
     setFilterSelected([...filterSelected, index]);
-    // setFilterSelected(value);
-    console.log('id', id)
-    console.log('index', index)
-    let test = [{
-      question_id: item?.question_id,
-      question_type: item.question_type,
-      idSingleQuestion : item.idSingleQuestion,
-      listIdAnswer: filterSelected
-    }]
-    setResult(...result, test)
-    console.log('test', test)
+    
   };
   const test = () => {
-    console.log('filterSelected',filterSelected)
-    console.log("addQuestion", addQuestion)
-    console.log('test', result)
+
+    console.log('dataFilter',dataFilter)
+    console.log('addquestion',addQuestion)
+
   };
   useEffect(() => {
     let test = [...questions];
@@ -141,7 +142,7 @@ const Quiz = () => {
     await examsServices.addQuestions({
       userId: idUser,
       examId: id,
-      lstQuestion: addQuestion,
+      lstQuestion: [...addQuestion,...dataFilter],
     });
   };
   return (
@@ -205,7 +206,7 @@ const Quiz = () => {
                       id={item?.id}
                       value={item?.id}
                       checked={
-                        questions[questionId]?.question_type == 1
+                        questions[questionId].question_type == 1
                           ? item?.anwer
                           : item?.checked
                       }

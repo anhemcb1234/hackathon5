@@ -6,9 +6,18 @@
 			"label": "docker-build",
 			"platform": "node",
 			"dockerBuild": {
+<<<<<<< HEAD
 				"dockerfile": "${workspaceFolder}/Dockerfile",
 				"context": "${workspaceFolder}",
 				"pull": true
+=======
+				"dockerfile": "${workspaceFolder}/react-config/Dockerfile",
+				"context": "${workspaceFolder}/react-config",
+				"pull": true
+			},
+			"node": {
+				"package": "${workspaceFolder}/react-config/package.json"
+>>>>>>> f36d9242db0ca5ffb606e6b55be65906532d0a84
 			}
 		},
 		{
@@ -17,7 +26,14 @@
 			"dependsOn": [
 				"docker-build"
 			],
+<<<<<<< HEAD
 			"platform": "node"
+=======
+			"platform": "node",
+			"node": {
+				"package": "${workspaceFolder}/react-config/package.json"
+			}
+>>>>>>> f36d9242db0ca5ffb606e6b55be65906532d0a84
 		},
 		{
 			"type": "docker-run",
@@ -32,6 +48,10 @@
 				}
 			},
 			"node": {
+<<<<<<< HEAD
+=======
+				"package": "${workspaceFolder}/react-config/package.json",
+>>>>>>> f36d9242db0ca5ffb606e6b55be65906532d0a84
 				"enableDebugging": true
 			}
 		}

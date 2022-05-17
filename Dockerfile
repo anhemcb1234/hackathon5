@@ -1,10 +1,11 @@
-FROM node:lts-alpine
-ENV NODE_ENV=production
-WORKDIR /usr/src/app
-COPY ["package.json", "package-lock.json*", "npm-shrinkwrap.json*", "./"]
-RUN yarn --production --silent && mv node_modules ../
+# build stage
+FROM node:13-alpine as build-stage
+WORKDIR /app
 COPY . .
-EXPOSE 8888
-RUN chown -R node /usr/src/app
-USER node
-CMD ["npm", "start"]
+RUN yarn  
+RUN yarn build
+
+# production stage
+FROM nginx:1.17-alpine as production-stage
+COPY --from=build-stage /app/dist /usr/share/nginx/html
+CMD ["nginx", "-g", "daemon off;"]

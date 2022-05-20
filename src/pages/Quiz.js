@@ -100,8 +100,6 @@ const Quiz = () => {
   }, [dataFilter]);
 
   const selectedFilterHandle = (id, index, item, e) => {
-    console.log("item", item);
-    console.log("index", index);
     setIdquestion(item?.question_id);
     item.checked = !item.checked;
     if (filterSelected?.includes(index)) {
@@ -133,7 +131,6 @@ const Quiz = () => {
       (x) => x.anwer === true
     );
     setListAnswer(filerList);
-    console.log("listanswer", listAnswer);
   };
   const handlerSubmit = async () => {
     await examsServices.addQuestions({

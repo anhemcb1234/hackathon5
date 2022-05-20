@@ -11,9 +11,13 @@ function getQuestions(id){
 function addQuestions(payload){
     return Axios.post(`/calculator/`,payload);
 }
+function getResult(idUser, idExam){
+    return Axios.get(`/result/getResultByExamAndUser/${idUser}/${idExam}`);
+}
 export const examsServices = {
     getExams,
     getExamById,
     getQuestions,
-    addQuestions
+    addQuestions,
+    getResult
 };

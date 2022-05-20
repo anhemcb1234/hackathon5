@@ -1,11 +1,23 @@
-# build stage
-FROM node:13-alpine as build-stage
-WORKDIR /app
-COPY . .
-RUN yarn  
-RUN yarn build
+# get the base node image
+FROM node:alpine as builder
 
-# production stage
-FROM nginx:1.17-alpine as production-stage
-COPY --from=build-stage /app/dist /usr/share/nginx/html
-CMD ["nginx", "-g", "daemon off;"]
+# set the working dir for container
+WORKDIR /frontend
+
+# copy the json file first
+COPY ./package.json /frontend
+
+# install npm dependencies
+RUN npm install yarn
+RUN yarn
+
+# copy other project files
+COPY . .
+
+# build the folder
+RUN yarn run build
+
+# Handle Nginx
+FROM nginx
+COPY --from=builder /frontend/build /usr/share/nginx/html
+COPY ./docker/nginx/default.conf /etc/nginx/conf.d/default.conf

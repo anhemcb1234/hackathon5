@@ -35,6 +35,7 @@ const SignUp = () => {
       setShowToast(true);
       setTimeout(() => {
         setShowToast(false);
+        navigate("/");
       }, 2000);
     } catch (e) {
       alert("Sign up fail");
@@ -48,7 +49,6 @@ const SignUp = () => {
   };
   return (
     <>
-      <button onClick={() => handlerTest()}>test</button>
       {showToast ? (
         <div className="flex absolute left-0 right-0 top-10  ease-in duration-300 flex-col justify-center">
           <div

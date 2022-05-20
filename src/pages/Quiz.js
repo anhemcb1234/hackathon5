@@ -35,14 +35,10 @@ const Quiz = () => {
   }
   const handlerStart = () => {
     setShow(!show);
-    setMinutes(3);
+    setMinutes(1);
     setSecond(59);
   };
   useEffect(() => {
-    if (second === 0 && minutes === 0) {
-      navigate("/result");
-      handlerSubmit();
-    }
     if (second === 0) {
       setSecond(59);
       setMinutes(minutes - 1);
@@ -102,11 +98,6 @@ const Quiz = () => {
     let newArray2 = getUniqueListBy(newArray, "question_id");
     setDataFilter(newArray2);
   }, [dataFilter]);
-  // useEffect(() => {
-  //   const arr1 = getUniqueListBy(listsAnswer, "question_id");
-  //   console.log('testoigg', arr1)
-  //   setAddQuestion(arr1);
-  // }, [listAnswer]);
 
   const selectedFilterHandle = (id, index, item, e) => {
     console.log("item", item);
@@ -150,15 +141,19 @@ const Quiz = () => {
       examId: id,
       lstQuestion: [...addQuestion.filter((x) => x.id), ...dataFilter],
     });
-    navigate(`/result?id=${id}`);
+    navigate(`/result?id=${id}&idUser=${idUser}`);
   };
   return (
     <>
       {show ? (
-        <div
-          id="app"
-          className="flex w-full h-screen justify-center items-center"
-        >
+        <div className="flex w-full h-screen justify-center items-center">
+          <div className="absolute top-5  right-5">
+            <Link to="/choose-quiz">
+              <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
+                Go to home page
+              </button>
+            </Link>
+          </div>
           <div className="w-full max-w-xl p-3">
             <h1 className="font-bold text-5xl text-center text-indigo-700">
               Hackathon Quiz
@@ -176,7 +171,7 @@ const Quiz = () => {
       ) : (
         <div
           id="app"
-          className="flex w-full h-screen justify-center items-center"
+          className="flex  w-full h-screen justify-center items-center"
         >
           <div className="w-full max-w-xl p-3">
             <div className="flex justify-between">
@@ -200,7 +195,10 @@ const Quiz = () => {
                 <span style={{ "--value": second }}></span>s
               </span>
             </div>
-            <div className="flex justify-start flex-col">
+            <div
+              className="flex justify-start flex-col"
+              style={{ height: "17vh" }}
+            >
               <>
                 <p className="font-bold w-full text-2xl text-indigo-700">
                   {questions[questionId]?.question_content}
@@ -220,7 +218,7 @@ const Quiz = () => {
                       checked={
                         questions[questionId].question_type == 1
                           ? item?.anwer
-                          : item?.checked
+                          : item?.checked.checked
                       }
                       onChange={
                         questions[questionId]?.question_type == 1

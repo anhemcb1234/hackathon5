@@ -33,10 +33,14 @@ export default function ChooseQuiz() {
       }
     })();
   }, []);
+  const handlerLogout = () => {
+    localStorage.removeItem("token");
+    navigate("/");
+  }
   return (
     <>
       {showToast ? (
-        <div className="flex absolute left-0 right-0 top-10  ease-in duration-300 flex-col justify-center">
+        <div className="flex absolute z-10 left-0 right-0 top-10  ease-in duration-300 flex-col justify-center">
           <div
             className="bg-green-600 shadow-lg mx-auto w-96 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block mb-3"
             id="static-example"
@@ -64,8 +68,8 @@ export default function ChooseQuiz() {
                 SUCCESS
               </p>
             </div>
-            <div class="p-3 bg-green-600 rounded-b-lg break-words text-white">
-              <p class="font-bold">Login in success</p>
+            <div className="p-3 bg-green-600 rounded-b-lg break-words text-white">
+              <p className="font-bold">Login in success</p>
             </div>
           </div>
         </div>
@@ -92,27 +96,39 @@ export default function ChooseQuiz() {
           </svg>
         </div>
       ) : (
-        <div
-          id="app"
-          className="flex w-full h-screen justify-center items-center"
-        >
-          <div className="w-full max-w-xl p-3">
-            <h1 className="font-bold text-5xl text-center text-indigo-700">
-              Hackathon Quiz
-            </h1>
-            <div className="mt-6 flex flex-col justify-center items-center">
-              {exams?.map((exam, index) => (
-                <div key={index} className="w-full my-2">
-                  <Link to={`/quiz?id=${exam?.id}`}>
-                    <button className="float-right w-full hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 bg-indigo-600 text-white text-sm font-bold tracking-wide rounded-full px-5 py-2">
-                      {exam?.exam_name}
-                    </button>
-                  </Link>
-                </div>
-              ))}
+        <>
+          <div className="absolute right-4 top-4">
+            <ul className="flex ">
+              <li>
+                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">List of quiz scores</button>
+              </li>
+              <li className="ml-4">
+                <button onClick={() => handlerLogout()} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Log out</button>
+              </li>
+            </ul>
+          </div>
+          <div
+            id="app"
+            className="flex w-full h-screen justify-center items-center"
+          >
+            <div className="w-full max-w-xl p-3">
+              <h1 className="font-bold text-5xl text-center text-indigo-700">
+                Hackathon Quiz
+              </h1>
+              <div className="mt-6 flex flex-col justify-center items-center">
+                {exams?.map((exam, index) => (
+                  <div key={index} className="w-full my-2">
+                    <Link to={`/quiz?id=${exam?.id}`}>
+                      <button className="float-right w-full hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 bg-indigo-600 text-white text-sm font-bold tracking-wide rounded-full px-5 py-2">
+                        {exam?.exam_name}
+                      </button>
+                    </Link>
+                  </div>
+                ))}
+              </div>
             </div>
           </div>
-        </div>
+        </>
       )}
     </>
   );

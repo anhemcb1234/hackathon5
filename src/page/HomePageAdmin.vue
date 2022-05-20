@@ -65,7 +65,6 @@
             </div>
         </div>
     </div>
-    <button @click="testing()">test</button>
     <Footer></Footer>
 </div>
 </template>
@@ -156,35 +155,7 @@ export default {
                 })),
             ];
         },
-    },
-    data() {
-        const todos = [{
-                description: "Take Noah to basketball practice.",
-                isComplete: false,
-                dates: {
-                    days: [1, 2, 3, 4],
-                    month: [4],
-                }, // Every Friday
-                color: "red",
-            },
-            {
-                description: "Take Noah to basketball practice.",
-                isComplete: true,
-                dates: {
-                    days: [5, 6, 7, 8],
-                }, // Every Friday
-                color: "green",
-            },
-        ];
-        return {
-            date: new Date(),
-            todos,
-            idStaff: this.$route.query.id,
-            listStaff: [],
-        };
-    },
-    computed: {
-        reverseMessage() {
+         reverseMessage() {
             return this.listStaff.data
         }
     },

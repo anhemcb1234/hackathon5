@@ -25,7 +25,9 @@ const Login = () => {
       });
       localStorage.setItem("token", reps.data.token);
       localStorage.setItem("userName", reps.data.username);
-      navigate(`/choose-quiz?userName=${reps.data.username}`);
+      localStorage.setItem("idUser", reps.data.id);
+
+      navigate(`/choose-quiz?userName=${reps.data.username}&id=${reps.data.id}`);
     } catch (e) {
       navigate("/");
       setTimeout(() => {

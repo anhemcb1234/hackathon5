@@ -1,0 +1,124 @@
+import React, { useEffect, useState } from "react";
+import { examsServices } from "../services/examsServices";
+import { Link, useNavigate, useSearchParams } from "react-router-dom";
+
+function DashBoard() {
+  const [data, setData] = useState([]);
+  const [searchParam] = useSearchParams();
+  const [result, setResult] = useState([]);
+  const [resultAnswer, setResultAnswer] = useState([]);
+  const [idUser, setIdUser] = useState(() => {
+    return localStorage.getItem("idUser");
+  });
+  useEffect(() => {
+    (async () => {
+      try {
+        const reps = await examsServices.getAllResult(idUser);
+        setData(reps.data);
+        console.log(reps.data);
+      } catch (e) {
+        console.log(e);
+      }
+    })();
+  }, []);
+  useEffect(() => {
+    let wrong = 0;
+    let correct = 0;
+    for(let i in data.resultDTOS){
+    if(data.resultDTOS[i].mark ==0){
+        wrong += 1
+    } else {
+        correct +=1
+    }
+    setResultAnswer({
+        correct,
+        wrong
+    })
+}
+  },[])
+  const test = () => {
+    console.log(data);
+    console.log(resultAnswer)
+  };
+  return (
+    <>
+      <button onClick={() => test()}>Test</button>
+      <div className="bg-white p-8 rounded-md w-full">
+        <div className=" flex items-center justify-between pb-6">
+          <div>
+            <h2 className="text-gray-600 font-semibold">Dashboard</h2>
+            <span className="text-xs">All exams</span>
+          </div>
+          <div className="flex items-center justify-between">
+            <div className="lg:ml-40 ml-10 space-x-8">
+              <Link
+                to={`/choose-quiz?userName=${searchParam.get(
+                  "UserName"
+                )}&id=${searchParam.get("id")}`}
+              >
+                <button className="bg-red-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
+                  Go to Home page
+                </button>
+              </Link>
+            </div>
+          </div>
+        </div>
+        <div>
+          <div className="-mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
+            <div className="inline-block min-w-full shadow rounded-lg overflow-hidden">
+              <table className="min-w-full leading-normal">
+                <thead>
+                  <tr>
+                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                      Name Exam
+                    </th>
+                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                      Correct answer
+                    </th>
+                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                      Wrong answer
+                    </th>
+                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                      Point
+                    </th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {data?.map((item, index) => (
+                    <>
+                      <tr key={index}>
+                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                          <div className="flex items-center">
+                            <p className="text-gray-900 whitespace-no-wrap">
+                              {item.exam_name}
+                            </p>
+                          </div>
+                        </td>
+                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                          <p className="text-gray-900 whitespace-no-wrap">
+                            {result.correct}
+                          </p>
+                        </td>
+                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                          <p className="text-gray-900 whitespace-no-wrap">
+                            {result.wrong}
+                          </p>
+                        </td>
+                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                          <p className="text-gray-900 whitespace-no-wrap">
+                            {item?.resultDTOS?.reduce((acc, int) => acc += int.mark,0)}
+                          </p>
+                        </td>
+                      </tr>
+                    </>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+    </>
+  );
+}
+export default DashBoard;

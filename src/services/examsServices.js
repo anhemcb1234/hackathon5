@@ -14,10 +14,14 @@ function addQuestions(payload){
 function getResult(idUser, idExam){
     return Axios.get(`/result/getResultByExamAndUser/${idUser}/${idExam}`);
 }
+function getAllResult(idUser){
+    return Axios.get(`/result/getAllResultByUser/${idUser}`);
+}
 export const examsServices = {
     getExams,
     getExamById,
     getQuestions,
     addQuestions,
-    getResult
+    getResult,
+    getAllResult
 };

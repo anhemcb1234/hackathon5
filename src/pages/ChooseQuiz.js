@@ -7,6 +7,12 @@ export default function ChooseQuiz() {
   const [show, setShow] = useState(true);
   const [showToast, setShowToast] = useState(false);
   const [searchParam] = useSearchParams();
+  const [id, setId] = useState(() => {
+    return searchParam.get("id");
+  });
+  const [userName, setUserName] = useState(() => {
+    return searchParam.get("userName");
+  });
   let navigate = useNavigate();
   useEffect(() => {
     if (!localStorage.getItem("token")) {
@@ -37,6 +43,9 @@ export default function ChooseQuiz() {
     localStorage.removeItem("token");
     navigate("/");
   }
+  const test = () => {
+    console.log(id)
+  }
   return (
     <>
       {show ? (
@@ -60,10 +69,13 @@ export default function ChooseQuiz() {
         </div>
       ) : (
         <>
+          <button onClick={() => test()}>Test</button>
           <div className="absolute right-4 top-4">
             <ul className="flex ">
               <li>
-                <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">List of quiz scores</button>
+                <Link to={`/dashboard?UserName=${userName}`}>
+                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">List of quiz scores</button>
+                </Link>
               </li>
               <li className="ml-4">
                 <button onClick={() => handlerLogout()} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Log out</button>

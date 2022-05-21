@@ -5,6 +5,8 @@ import SignUp from "./pages/SignUp";
 import Quiz from "./pages/Quiz";
 import ChooseQuiz from "./pages/ChooseQuiz";
 import Result from "./pages/Result"
+import DashBoard from "./pages/DashBoard";
+import NotFound from "./pages/NotFound";
 /* import QuizDetail from "./components/QuizDetail"; */
 export default function App() {
   return (
@@ -16,6 +18,8 @@ export default function App() {
           <Route path="/choose-quiz" element={<ChooseQuiz />} />
           <Route path="/quiz" element={<Quiz />}></Route>
           <Route path="/result" element={<Result />}></Route>
+          <Route path="/dashboard" element={<DashBoard />}></Route>
+          <Route path="*" element={<NotFound />}></Route>
         </Routes>
         {/* <Link to={`/about?name=mien&age=20`}>about</Link> */}
       </BrowserRouter>

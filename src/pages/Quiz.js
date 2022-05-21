@@ -27,6 +27,9 @@ const Quiz = () => {
   const [idQuestion, setIdquestion] = useState(() => {
     return questions[questionId]?.id;
   });
+  const [userName, setUserName] = useState(() => {
+    return localStorage.getItem("userName");
+  });
   const [dataFilter, setDataFilter] = useState([]);
   const red = "text-rose-600";
   if (!localStorage.getItem("token")) {
@@ -145,7 +148,7 @@ const Quiz = () => {
       {show ? (
         <div className="flex w-full h-screen justify-center items-center">
           <div className="absolute top-5  right-5">
-            <Link to="/choose-quiz">
+            <Link to={`/choose-quiz?userName=${userName}`}>
               <button className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">
                 Go to home page
               </button>

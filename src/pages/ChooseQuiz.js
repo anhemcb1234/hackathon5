@@ -43,7 +43,6 @@ export default function ChooseQuiz() {
     localStorage.removeItem("token");
     localStorage.removeItem("userName");
     localStorage.removeItem("idUser");
-
     navigate("/");
   };
 
@@ -70,35 +69,39 @@ export default function ChooseQuiz() {
         </div>
       ) : (
         <>
-          <section class="fixed mx-auto">
-            <nav class="flex justify-between bg-violet-900 text-white w-screen">
-              <div class="px-5 xl:px-12 py-6 flex w-full items-center justify-between">
-                <a class="text-3xl font-bold font-heading" href="#">
+          <section className="fixed mx-auto">
+            <nav className="flex justify-between bg-violet-900 text-white w-screen">
+              <div className="px-5 sm:p-5  xl:px-12 py-6 flex w-full items-center justify-between">
+                <a className="text-3xl font-bold font-heading" href="#">
                   <h1>Hackathon</h1>
                 </a>
-                <div class="xl:flex items-center space-x-5">
-                  <ul className="flex ">
-                  <li>
+                <div className="xl:flex  items-center space-x-5">
+                  <ul className="flex sm:ml-2 items-center justify-center ">
+                    <li>
                       <Link to={`/ranking`}>
-                        <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                        <button className="smm:hidden sm:hidden md:hidden lg:inline xl:inline bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
                           Ranking
                         </button>
+                        <i className="fa-solid fa-ranking-star sm:inline md:inline lg:hidden xl:hidden"></i>
                       </Link>
                     </li>
                     <li className="ml-4">
                       <Link to={`/dashboard?UserName=${userName}`}>
-                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                        <button className="smm:hidden sm:hidden md:hidden lg:inline xl:inline  bg-blue-500  hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
                           List of quiz scores
                         </button>
+                        <i className="fa-solid fa-list sm:inline md:inline lg:hidden xl:hidden"></i>
                       </Link>
                     </li>
                     <li className="ml-4">
                       <button
                         onClick={() => handlerLogout()}
-                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                        className="bg-red-500 smm:hidden sm:hidden lg:inline xl:inline   hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
                       >
                         Log out
                       </button>
+
+                      <i onClick={() => handlerLogout()} className="fa-solid fa-arrow-right-from-bracket sm:inline md:inline lg:hidden xl:hidden"></i>
                     </li>
                   </ul>
                 </div>
@@ -107,10 +110,10 @@ export default function ChooseQuiz() {
           </section>
           <div
             id="app"
-            className="flex w-full h-screen justify-center items-center"
+            className="flex w-full  h-screen justify-center items-center"
           >
             <div className="w-full max-w-xl p-3">
-              <h1 className="font-bold text-5xl text-center text-indigo-700">
+              <h1 className="font-bold sm:mt-20  text-5xl text-center text-indigo-700">
                 Hackathon Quiz
               </h1>
               <div>

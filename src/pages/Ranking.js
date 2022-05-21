@@ -4,15 +4,15 @@ import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
 function Ranking() {
   const [data, setData] = useState([]);
+  const [datas, setDatas] = useState([]);
   const [searchParam] = useSearchParams();
-  const [result, setResult] = useState([]);
   const [idUser, setIdUser] = useState(() => {
     return localStorage.getItem("idUser");
   });
   useEffect(() => {
     (async () => {
       try {
-        console.log(1)
+        console.log(1);
         const reps = await examsServices.getRanking();
         setData(reps.data);
         console.log(reps.data);
@@ -21,7 +21,16 @@ function Ranking() {
       }
     })();
   }, []);
-
+  useEffect(() => {
+    let cloneData = [...data]
+    cloneData.map((items) =>
+      items.examDTO.reduce((acc, item) => {
+        return items.total = acc + item.totalScore;
+      },0)
+    );
+    console.log(1)
+    setDatas(cloneData)
+  }, [datas])
   return (
     <>
       <div className="bg-white p-8 rounded-md w-full">
@@ -33,9 +42,9 @@ function Ranking() {
           <div className="flex items-center justify-between">
             <div className="lg:ml-40 ml-10 space-x-8">
               <Link
-                to={`/choose-quiz?userName=${
-                localStorage.getItem("userName")
-                }&id=${localStorage.getItem("idUser")}`}
+                to={`/choose-quiz?userName=${localStorage.getItem(
+                  "userName"
+                )}&id=${localStorage.getItem("idUser")}`}
               >
                 <button className="bg-red-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
                   Go to Home page
@@ -51,23 +60,33 @@ function Ranking() {
                 <thead>
                   <tr>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
+                      No.
+                    </th>
+                    <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                       Name user
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
                       Email user
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                    Total number of exams 
+                      Total number of exams
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                      Tola point
+                      Total point
                     </th>
                   </tr>
                 </thead>
                 <tbody>
-                  {data?.map((item, index) => (
+                  {datas?.sort((a, b) => b.total - a.total)?.map((item, index) => (
                     <>
                       <tr key={index}>
+                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                          <div className="flex items-center">
+                            <p className="text-gray-900 whitespace-no-wrap">
+                              {index + 1}
+                            </p>
+                          </div>
+                        </td>
                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                           <div className="flex items-center">
                             <p className="text-gray-900 whitespace-no-wrap">
@@ -88,13 +107,12 @@ function Ranking() {
                           </p>
                         </td>
                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                          <p className="text-gray-900 whitespace-no-wrap">
+                          <p className="text-gray-900 text-center whitespace-no-wrap">
                             {item?.examDTO?.reduce((acc, cur) => {
-                                return acc + cur.totalScore;
+                              return acc + cur.totalScore;
                             }, 0)}
                           </p>
                         </td>
-                       
                       </tr>
                     </>
                   ))}

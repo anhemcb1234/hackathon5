@@ -1,7 +1,11 @@
 module.exports = {
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      screens: {
+        'smm': '375px',
+      }
+    },
   },
   plugins: [require('tw-elements/dist/plugin')],
   plugins: [require('daisyui')],
@@ -15,4 +19,5 @@ module.exports = {
     prefix: "",
     darkTheme: "dark",
   },
+
 };

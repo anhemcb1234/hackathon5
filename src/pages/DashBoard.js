@@ -36,6 +36,21 @@ function DashBoard() {
     })
 }
   },[])
+  useEffect(() => {
+  let cloneData = [...data]
+    cloneData.map(x => {
+      let correct = 0
+      let wrong = 0
+      for(let i in x.resultDTOS) {
+          if(x.resultDTOS[i].mark == 0) {
+              x.wrong = wrong += 1
+          } else {
+              x.correct = correct += 1
+          }
+      }
+  })
+  setResult(cloneData)
+  },[result])
   return (
     <>
       <div className="bg-white p-8 rounded-md w-full">
@@ -49,7 +64,7 @@ function DashBoard() {
               <Link
                 to={`/choose-quiz?userName=${searchParam.get(
                   "UserName"
-                )}&id=${searchParam.get("id")}`}
+                )}`}
               >
                 <button className="bg-red-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
                   Go to Home page
@@ -79,7 +94,7 @@ function DashBoard() {
                   </tr>
                 </thead>
                 <tbody>
-                  {data?.map((item, index) => (
+                  {result?.map((item, index) => (
                     <>
                       <tr key={index}>
                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
@@ -91,12 +106,12 @@ function DashBoard() {
                         </td>
                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                           <p className="text-gray-900 whitespace-no-wrap">
-                            {result.correct}
+                            {item.correct}
                           </p>
                         </td>
                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                           <p className="text-gray-900 whitespace-no-wrap">
-                            {result.wrong}
+                            {item.wrong}
                           </p>
                         </td>
                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">

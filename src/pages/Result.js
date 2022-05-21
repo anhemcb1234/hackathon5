@@ -62,7 +62,7 @@ function Result() {
             Result Hackathon Quiz
           </h1>
           <div className="mt-4">
-            <p>UserName: {userName}</p>
+            <p>User: {userName}</p>
           </div>
           <div className="mt-1 flex flex-col justify-center items-center">
                 <h2 className="text-bold text-3xl text-center">

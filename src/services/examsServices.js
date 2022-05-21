@@ -17,11 +17,16 @@ function getResult(idUser, idExam){
 function getAllResult(idUser){
     return Axios.get(`/result/getAllResultByUser/${idUser}`);
 }
+function getRanking(){
+    return Axios.get(`/result/ranking`);
+}
+
 export const examsServices = {
     getExams,
     getExamById,
     getQuestions,
     addQuestions,
     getResult,
-    getAllResult
+    getAllResult,
+    getRanking
 };

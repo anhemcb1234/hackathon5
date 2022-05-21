@@ -41,11 +41,12 @@ export default function ChooseQuiz() {
   }, []);
   const handlerLogout = () => {
     localStorage.removeItem("token");
+    localStorage.removeItem("userName");
+    localStorage.removeItem("idUser");
+
     navigate("/");
-  }
-  const test = () => {
-    console.log(id)
-  }
+  };
+
   return (
     <>
       {show ? (
@@ -69,19 +70,41 @@ export default function ChooseQuiz() {
         </div>
       ) : (
         <>
-          <button onClick={() => test()}>Test</button>
-          <div className="absolute right-4 top-4">
-            <ul className="flex ">
-              <li>
-                <Link to={`/dashboard?UserName=${userName}`}>
-                  <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">List of quiz scores</button>
-                </Link>
-              </li>
-              <li className="ml-4">
-                <button onClick={() => handlerLogout()} className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Log out</button>
-              </li>
-            </ul>
-          </div>
+          <section class="fixed mx-auto">
+            <nav class="flex justify-between bg-violet-900 text-white w-screen">
+              <div class="px-5 xl:px-12 py-6 flex w-full items-center justify-between">
+                <a class="text-3xl font-bold font-heading" href="#">
+                  <h1>Hackathon</h1>
+                </a>
+                <div class="xl:flex items-center space-x-5">
+                  <ul className="flex ">
+                  <li>
+                      <Link to={`/ranking`}>
+                        <button className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
+                          Ranking
+                        </button>
+                      </Link>
+                    </li>
+                    <li className="ml-4">
+                      <Link to={`/dashboard?UserName=${userName}`}>
+                        <button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+                          List of quiz scores
+                        </button>
+                      </Link>
+                    </li>
+                    <li className="ml-4">
+                      <button
+                        onClick={() => handlerLogout()}
+                        className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+                      >
+                        Log out
+                      </button>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </nav>
+          </section>
           <div
             id="app"
             className="flex w-full h-screen justify-center items-center"
@@ -91,7 +114,7 @@ export default function ChooseQuiz() {
                 Hackathon Quiz
               </h1>
               <div>
-                <p className="mt-2">UserName: {searchParam.get('userName')}</p>
+                <p className="mt-2">User: {searchParam.get("userName")}</p>
               </div>
               <div className="mt-6 flex flex-col justify-center items-center">
                 {exams?.map((exam, index) => (

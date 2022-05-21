@@ -7,6 +7,7 @@ import ChooseQuiz from "./pages/ChooseQuiz";
 import Result from "./pages/Result"
 import DashBoard from "./pages/DashBoard";
 import NotFound from "./pages/NotFound";
+import Ranking from "./pages/Ranking";
 /* import QuizDetail from "./components/QuizDetail"; */
 export default function App() {
   return (
@@ -19,6 +20,7 @@ export default function App() {
           <Route path="/quiz" element={<Quiz />}></Route>
           <Route path="/result" element={<Result />}></Route>
           <Route path="/dashboard" element={<DashBoard />}></Route>
+          <Route path="/ranking" element={<Ranking />}></Route>
           <Route path="*" element={<NotFound />}></Route>
         </Routes>
         {/* <Link to={`/about?name=mien&age=20`}>about</Link> */}

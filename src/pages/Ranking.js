@@ -2,18 +2,18 @@ import React, { useEffect, useState } from "react";
 import { examsServices } from "../services/examsServices";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 
-function DashBoard() {
+function Ranking() {
   const [data, setData] = useState([]);
   const [searchParam] = useSearchParams();
   const [result, setResult] = useState([]);
-  const [resultAnswer, setResultAnswer] = useState([]);
   const [idUser, setIdUser] = useState(() => {
     return localStorage.getItem("idUser");
   });
   useEffect(() => {
     (async () => {
       try {
-        const reps = await examsServices.getAllResult(idUser);
+        console.log(1)
+        const reps = await examsServices.getRanking();
         setData(reps.data);
         console.log(reps.data);
       } catch (e) {
@@ -21,35 +21,21 @@ function DashBoard() {
       }
     })();
   }, []);
-  useEffect(() => {
-    let wrong = 0;
-    let correct = 0;
-    for(let i in data.resultDTOS){
-    if(data.resultDTOS[i].mark ==0){
-        wrong += 1
-    } else {
-        correct +=1
-    }
-    setResultAnswer({
-        correct,
-        wrong
-    })
-}
-  },[])
+
   return (
     <>
       <div className="bg-white p-8 rounded-md w-full">
         <div className=" flex items-center justify-between pb-6">
           <div>
-            <h2 className="text-gray-600 font-semibold">Dashboard</h2>
-            <span className="text-xs">All exams</span>
+            <h2 className="text-gray-600 font-semibold">Ranking</h2>
+            <span className="text-xs">Top user</span>
           </div>
           <div className="flex items-center justify-between">
             <div className="lg:ml-40 ml-10 space-x-8">
               <Link
-                to={`/choose-quiz?userName=${searchParam.get(
-                  "UserName"
-                )}&id=${searchParam.get("id")}`}
+                to={`/choose-quiz?userName=${
+                localStorage.getItem("userName")
+                }&id=${localStorage.getItem("idUser")}`}
               >
                 <button className="bg-red-600 px-4 py-2 rounded-md text-white font-semibold tracking-wide cursor-pointer">
                   Go to Home page
@@ -65,16 +51,16 @@ function DashBoard() {
                 <thead>
                   <tr>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                      Name Exam
+                      Name user
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                      Correct answer
+                      Email user
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                      Wrong answer
+                    Total number of exams 
                     </th>
                     <th className="px-5 py-3 border-b-2 border-gray-200 bg-gray-100 text-left text-xs font-semibold text-gray-600 uppercase tracking-wider">
-                      Point
+                      Tola point
                     </th>
                   </tr>
                 </thead>
@@ -85,25 +71,30 @@ function DashBoard() {
                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                           <div className="flex items-center">
                             <p className="text-gray-900 whitespace-no-wrap">
-                              {item.exam_name}
+                              {item?.username}
                             </p>
                           </div>
                         </td>
                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                          <p className="text-gray-900 whitespace-no-wrap">
-                            {result.correct}
+                          <div className="flex items-center">
+                            <p className="text-gray-900 whitespace-no-wrap">
+                              {item?.email}
+                            </p>
+                          </div>
+                        </td>
+                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                          <p className="text-gray-900 whitespace-no-wrap text-center">
+                            {item?.examDTO?.length}
                           </p>
                         </td>
                         <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
                           <p className="text-gray-900 whitespace-no-wrap">
-                            {result.wrong}
+                            {item?.examDTO?.reduce((acc, cur) => {
+                                return acc + cur.totalScore;
+                            }, 0)}
                           </p>
                         </td>
-                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                          <p className="text-gray-900 whitespace-no-wrap">
-                            {item?.resultDTOS?.reduce((acc, int) => acc += int.mark,0)}
-                          </p>
-                        </td>
+                       
                       </tr>
                     </>
                   ))}
@@ -116,4 +107,4 @@ function DashBoard() {
     </>
   );
 }
-export default DashBoard;
+export default Ranking;

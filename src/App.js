@@ -21,7 +21,6 @@ export default function App() {
           <Route path="/result" element={<Result />}></Route>
           <Route path="/dashboard" element={<DashBoard />}></Route>
           <Route path="/ranking" element={<Ranking />}></Route>
-          <Route path="*" element={<NotFound />}></Route>
         </Routes>
         {/* <Link to={`/about?name=mien&age=20`}>about</Link> */}
       </BrowserRouter>

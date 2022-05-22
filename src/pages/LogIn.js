@@ -10,11 +10,6 @@ const Login = () => {
 
   let navigate = useNavigate();
 
-  useEffect(() => {
-    if(localStorage.getItem('token')) {
-      navigate('/choose-quiz')
-    }
-  },[])
 
   const handlerLogin = async () => {
     try {
@@ -91,8 +86,8 @@ const Login = () => {
                     ERROR
                   </p>
                 </div>
-                <div class="p-3 bg-red-600 rounded-b-lg break-words text-white">
-                  <p class="font-bold">
+                <div className="p-3 bg-red-600 rounded-b-lg break-words text-white">
+                  <p className="font-bold">
                     Please check your password and account
                   </p>
                 </div>

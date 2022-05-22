@@ -12,10 +12,8 @@ function Ranking() {
   useEffect(() => {
     (async () => {
       try {
-        console.log(1);
         const reps = await examsServices.getRanking();
         setData(reps.data);
-        console.log(reps.data);
       } catch (e) {
         console.log(e);
       }
@@ -28,7 +26,6 @@ function Ranking() {
         return (items.total = acc + item.totalScore);
       }, 0)
     );
-    console.log(1);
     setDatas(cloneData);
   }, [datas]);
   return (

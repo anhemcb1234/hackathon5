@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { Link, useNavigate, useSearchParams } from "react-router-dom";
 import { examsServices } from "../services/examsServices";
-
 export default function ChooseQuiz() {
   const [exams, setExams] = useState([]);
   const [show, setShow] = useState(true);
@@ -44,8 +43,7 @@ export default function ChooseQuiz() {
     localStorage.removeItem("userName");
     localStorage.removeItem("idUser");
     navigate("/");
-  };
-
+  }
   return (
     <>
       {show ? (

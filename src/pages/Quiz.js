@@ -50,6 +50,10 @@ const Quiz = () => {
     let time = setInterval(() => {
       setSecond(second - 1);
     }, 1000);
+    window.addEventListener('beforeunload', function (e) {
+      e.preventDefault();
+      e.returnValue = '';
+   });
     return () => clearInterval(time);
   }, [second]);
   useEffect(() => {
@@ -209,7 +213,7 @@ const Quiz = () => {
                 <p className="font-bold w-full text-2xl text-indigo-700">
                   {questions[questionId]?.question_content}
                 </p>
-                {questions[questionId]?.image_url ? <img className="w-full rounded mb-2 h-20 object-cover" src={"http://18.136.124.246:9998/images/"+questions[questionId]?.image_url}/> : null}
+                {questions[questionId]?.image_url ? <img className="w-full rounded mb-2 h-24 object-cover" src={"http://18.136.124.246:9998/images/"+questions[questionId]?.image_url}/> : null}
                 {questions[questionId]?.answerDTOS?.map((item, index) => (
                   <div className="mx-2 flex items-center" key={index}>                    
                     <input
@@ -249,7 +253,7 @@ const Quiz = () => {
                 ))}
               </>
             </div>
-            <div className={questions[questionId]?.image_url ? mt + ' mt-32' :  mt + ' mt-12'}>
+            <div className={questions[questionId]?.image_url ? mt + ' mt-36' :  mt + ' mt-12'}>
               <button
                 onClick={() => handlerPrevious()}
                 className="float-right hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 bg-indigo-600 text-white text-sm font-bold tracking-wide rounded-full px-5 py-2"

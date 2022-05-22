@@ -1,10 +1,10 @@
 module.exports = {
-<<<<<<< HEAD
   content: ["./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
       screens: {
         'smm': '375px',
+
       }
     },
   },
@@ -22,15 +22,3 @@ module.exports = {
   },
 
 };
-=======
-  important: true,
-  content: [
-    "./index.html",
-    "./src/**/*.{vue,js,ts,jsx,tsx}",
-  ],
-  theme: {
-    extend: {},
-  },
-  plugins: [],
-}
->>>>>>> c388b9b9a8438e8f36cca9e8993759d6f18f57d5

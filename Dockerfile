@@ -5,6 +5,7 @@ RUN npm install yarn
 RUN yarn 
 COPY . /app
 RUN yarn run build
+
 FROM nginx:stable-alpine
 WORKDIR website
 COPY --from=build-dist ./app/build /website

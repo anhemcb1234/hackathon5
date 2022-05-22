@@ -17,8 +17,8 @@ const Quiz = () => {
     return [];
   });
   const [questionId, setQuestionId] = useState(0);
-  const [minutes, setMinutes] = useState(0);
-  const [second, setSecond] = useState(0);
+  const [minutes, setMinutes] = useState(10);
+  const [second, setSecond] = useState(10);
   const [listAnswer, setListAnswer] = useState([]);
   const [listsAnswer, setListAnswers] = useState([]);
   const [addQuestion, setAddQuestion] = useState([]);
@@ -32,6 +32,7 @@ const Quiz = () => {
   });
   const [dataFilter, setDataFilter] = useState([]);
   const red = "text-rose-600";
+  const mt = "flex a justify-between"
   if (!localStorage.getItem("token")) {
     alert("You must be logged in to access this page");
     navigate("/");
@@ -101,7 +102,12 @@ const Quiz = () => {
     let newArray2 = getUniqueListBy(newArray, "question_id");
     setDataFilter(newArray2);
   }, [dataFilter]);
-
+  useEffect(() => {
+    if(second === 0 && minutes === 0) {
+      handlerSubmit()
+      return
+    }
+  },[])
   const selectedFilterHandle = (id, index, item, e) => {
     setIdquestion(item?.question_id);
     item.checked = !item.checked;
@@ -203,8 +209,9 @@ const Quiz = () => {
                 <p className="font-bold w-full text-2xl text-indigo-700">
                   {questions[questionId]?.question_content}
                 </p>
+                {questions[questionId]?.image_url ? <img className="w-full rounded mb-2 h-20 object-cover" src={"http://18.136.124.246:9998/images/"+questions[questionId]?.image_url}/> : null}
                 {questions[questionId]?.answerDTOS?.map((item, index) => (
-                  <div className="mx-2 flex items-center" key={index}>
+                  <div className="mx-2 flex items-center" key={index}>                    
                     <input
                       className="form-check-input mr-2  appearance-none rounded-full h-4 w-4 border border-gray-300 bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 align-top bg-no-repeat bg-center bg-contain float-left cursor-pointer"
                       type={
@@ -242,7 +249,7 @@ const Quiz = () => {
                 ))}
               </>
             </div>
-            <div className="flex a justify-between mt-10">
+            <div className={questions[questionId]?.image_url ? mt + ' mt-32' :  mt + ' mt-12'}>
               <button
                 onClick={() => handlerPrevious()}
                 className="float-right hover:bg-violet-600 active:bg-violet-700 focus:outline-none focus:ring focus:ring-violet-300 bg-indigo-600 text-white text-sm font-bold tracking-wide rounded-full px-5 py-2"

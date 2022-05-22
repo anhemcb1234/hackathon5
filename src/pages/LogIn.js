@@ -63,7 +63,7 @@ const Login = () => {
       ) : (
         <>
           {showToast ? (
-            <div className="flex absolute left-0 right-0 top-10  ease-in duration-300 flex-col justify-center">
+            <div className="flex  absolute left-0 right-0 top-10  ease-in duration-300 flex-col justify-center">
               <div
                 className="bg-red-600 shadow-lg mx-auto w-96 max-w-full text-sm pointer-events-auto bg-clip-padding rounded-lg block mb-3"
                 id="static-example"
@@ -100,7 +100,7 @@ const Login = () => {
             </div>
           ) : null}
 
-          <section className="h-screen">
+          <section className="h-screen ">
             <div className="px-6 h-full text-gray-800">
               <div className="flex xl:justify-center lg:justify-between justify-center items-center flex-wrap h-full g-6">
                 <div className="grow-0 shrink-1 md:shrink-0 basis-auto xl:w-6/12 lg:w-6/12 md:w-9/12 mb-12 md:mb-0">
@@ -113,7 +113,7 @@ const Login = () => {
                 <div className="xl:ml-20 xl:w-5/12 lg:w-5/12 md:w-8/12 mb-12 md:mb-0">
                   <form>
                     <div className="mb-6">
-                      <h1 className="text-4xl font-bold text-center">Login</h1>
+                      <h1 className="text-4xl font-bold text-center ">Login</h1>
                     </div>
 
                     <div className="mb-6">

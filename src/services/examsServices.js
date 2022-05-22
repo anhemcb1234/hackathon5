@@ -1,24 +1,24 @@
 import {Axios} from './Axios';
 function getExams(){
-    return Axios.get('/category');
+    return Axios.get('/api/category');
 }
 function getExamById(id){
-    return Axios.get(`/category/${id}`);
+    return Axios.get(`/api/category/${id}`);
 }
 function getQuestions(id){
-    return Axios.get(`/question/getQuestionByExamId/${id}`);
+    return Axios.get(`/api/question/getQuestionByExamId/${id}`);
 }
 function addQuestions(payload){
-    return Axios.post(`/calculator/`,payload);
+    return Axios.post(`/api/calculator/`,payload);
 }
 function getResult(idUser, idExam){
-    return Axios.get(`/result/getResultByExamAndUser/${idUser}/${idExam}`);
+    return Axios.get(`/api/result/getResultByExamAndUser/${idUser}/${idExam}`);
 }
 function getAllResult(idUser){
-    return Axios.get(`/result/getAllResultByUser/${idUser}`);
+    return Axios.get(`/api/result/getAllResultByUser/${idUser}`);
 }
 function getRanking(){
-    return Axios.get(`/result/ranking`);
+    return Axios.get(`/api/result/ranking`);
 }
 
 export const examsServices = {

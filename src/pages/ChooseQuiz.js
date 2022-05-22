@@ -79,29 +79,16 @@ export default function ChooseQuiz() {
                   <ul className="flex sm:ml-2 items-center justify-center ">
                     <li>
                       <Link to={`/ranking`}>
-                        <button className="smm:hidden sm:hidden md:hidden lg:inline xl:inline bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">
-                          Ranking
-                        </button>
-                        <i className="fa-solid fa-ranking-star sm:inline md:inline lg:hidden xl:hidden"></i>
+                        <i className="fa-solid fa-ranking-star sm:inline md:inline md:text-xl lg:text-2xl "></i>
                       </Link>
                     </li>
                     <li className="ml-4">
                       <Link to={`/dashboard?UserName=${userName}`}>
-                        <button className="smm:hidden sm:hidden md:hidden lg:inline xl:inline  bg-blue-500  hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
-                          List of quiz scores
-                        </button>
-                        <i className="fa-solid fa-list sm:inline md:inline lg:hidden xl:hidden"></i>
+                        <i className="fa-solid fa-list sm:inline md:inline md:text-xl lg:text-2xl"></i>
                       </Link>
                     </li>
                     <li className="ml-4">
-                      <button
-                        onClick={() => handlerLogout()}
-                        className="bg-red-500 smm:hidden sm:hidden lg:inline xl:inline   hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-                      >
-                        Log out
-                      </button>
-
-                      <i onClick={() => handlerLogout()} className="fa-solid fa-arrow-right-from-bracket sm:inline md:inline lg:hidden xl:hidden"></i>
+                      <i onClick={() => handlerLogout()} className="fa-solid fa-arrow-right-from-bracket md:text-xl sm:inline md:inline lg:text-2xl"></i>
                     </li>
                   </ul>
                 </div>

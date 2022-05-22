@@ -22,15 +22,15 @@ function Ranking() {
     })();
   }, []);
   useEffect(() => {
-    let cloneData = [...data]
+    let cloneData = [...data];
     cloneData.map((items) =>
       items.examDTO.reduce((acc, item) => {
-        return items.total = acc + item.totalScore;
-      },0)
+        return (items.total = acc + item.totalScore);
+      }, 0)
     );
-    console.log(1)
-    setDatas(cloneData)
-  }, [datas])
+    console.log(1);
+    setDatas(cloneData);
+  }, [datas]);
   return (
     <>
       <div className="bg-white p-8 rounded-md w-full">
@@ -77,45 +77,47 @@ function Ranking() {
                   </tr>
                 </thead>
                 <tbody>
-                  {datas?.sort((a, b) => b.total - a.total)?.map((item, index) => (
-                    <>
-                      <tr key={index}>
-                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                          <div className="flex items-center">
-                            <p className="text-gray-900 whitespace-no-wrap">
-                              {index + 1}
+                  {datas
+                    ?.sort((a, b) => b.total - a.total)
+                    ?.map((item, index) => (
+                      <>
+                        <tr key={index}>
+                          <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <div className="flex items-center">
+                              <p className="text-gray-900 whitespace-no-wrap">
+                                {index + 1}
+                              </p>
+                            </div>
+                          </td>
+                          <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <div className="flex items-center">
+                              <p className="text-gray-900 whitespace-no-wrap">
+                                {item?.username}
+                              </p>
+                            </div>
+                          </td>
+                          <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <div className="flex items-center">
+                              <p className="text-gray-900 whitespace-no-wrap">
+                                {item?.email}
+                              </p>
+                            </div>
+                          </td>
+                          <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <p className="text-gray-900 whitespace-no-wrap text-center">
+                              {item?.examDTO?.length}
                             </p>
-                          </div>
-                        </td>
-                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                          <div className="flex items-center">
-                            <p className="text-gray-900 whitespace-no-wrap">
-                              {item?.username}
+                          </td>
+                          <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
+                            <p className="text-gray-900 text-center whitespace-no-wrap">
+                              {item?.examDTO?.reduce((acc, cur) => {
+                                return acc + cur.totalScore;
+                              }, 0)}
                             </p>
-                          </div>
-                        </td>
-                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                          <div className="flex items-center">
-                            <p className="text-gray-900 whitespace-no-wrap">
-                              {item?.email}
-                            </p>
-                          </div>
-                        </td>
-                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                          <p className="text-gray-900 whitespace-no-wrap text-center">
-                            {item?.examDTO?.length}
-                          </p>
-                        </td>
-                        <td className="px-5 py-5 border-b border-gray-200 bg-white text-sm">
-                          <p className="text-gray-900 text-center whitespace-no-wrap">
-                            {item?.examDTO?.reduce((acc, cur) => {
-                              return acc + cur.totalScore;
-                            }, 0)}
-                          </p>
-                        </td>
-                      </tr>
-                    </>
-                  ))}
+                          </td>
+                        </tr>
+                      </>
+                    ))}
                 </tbody>
               </table>
             </div>

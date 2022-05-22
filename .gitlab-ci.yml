@@ -32,4 +32,4 @@ deploy:
     - ssh -o StrictHostKeyChecking=no -i $GITLAB_CI_SSH_KEY $SERVER_USER@$SERVER_HOST "docker run -d --name html-app -p 80:80 $TAG_COMMIT" #run docker image với tên là html-app
   environment:
     name: production
-    url: http://13.213.8.158 #url của server chạy web
+    url: http://$SERVER_HOST #url của server chạy web

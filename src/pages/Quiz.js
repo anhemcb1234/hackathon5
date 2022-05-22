@@ -107,7 +107,7 @@ const Quiz = () => {
       handlerSubmit()
       return
     }
-  },[])
+  },[second])
   const selectedFilterHandle = (id, index, item, e) => {
     setIdquestion(item?.question_id);
     item.checked = !item.checked;
